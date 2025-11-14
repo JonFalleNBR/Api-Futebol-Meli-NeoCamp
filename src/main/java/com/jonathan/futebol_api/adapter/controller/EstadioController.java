@@ -40,6 +40,7 @@ public class EstadioController {
                 })
                 .orElseThrow(() -> new RuntimeException(utils.MensagensException.ESTADIO_INEXISTENTE.getMensagem()));
 
+
     }
 
     @GetMapping("/{id}")
@@ -49,7 +50,6 @@ public class EstadioController {
 
 
     }
-
 
     @GetMapping
     public ResponseEntity <List<Estadio>> getEstadio(@PathVariable Integer id){
