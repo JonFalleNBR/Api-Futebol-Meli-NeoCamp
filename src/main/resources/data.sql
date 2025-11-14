@@ -1,0 +1,31 @@
+--
+-- CREATE TABLE Estadio (
+--                          idEstadio INT AUTO_INCREMENT PRIMARY KEY,
+--                          nome VARCHAR(255) NOT NULL
+-- );
+--
+-- CREATE TABLE Clube (
+--                        idClube INT AUTO_INCREMENT PRIMARY KEY,
+--                        nome VARCHAR(255) NOT NULL,
+--                        data_criacao DATE NOT NULL,
+--                        estado NOT NULL,
+--                        ativo BOOLEAN NOT NULL,
+--                        fk_idestadio INT,
+--                        vitorias INT DEFAULT 0,
+--                        derrotas INT DEFAULT 0,
+--                        empates INT DEFAULT 0,
+--                        ativo INT DEFAULT  0,
+--                        FOREIGN KEY (fk_idestadio) REFERENCES Estadio(idEstadio)
+-- );
+--
+-- CREATE TABLE Partida (
+--                          idPartida INT AUTO_INCREMENT PRIMARY KEY,
+--                          id_clube_mandante INT,
+--                          id_clube_visitante INT,
+--                          resultado VARCHAR(50),
+--                          id_estadio INT,
+--                          data_hora DATETIME,
+--                          FOREIGN KEY (id_clube_mandante) REFERENCES Clube(idClube),
+--                          FOREIGN KEY (id_clube_visitante) REFERENCES Clube(idClube),
+--                          FOREIGN KEY (id_estadio) REFERENCES Estadio(idEstadio)
+-- );
