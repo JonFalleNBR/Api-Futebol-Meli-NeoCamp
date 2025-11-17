@@ -6,5 +6,9 @@ public record ClubeResponseDTO(
         @NotBlank String nome,
         String estado,
         String estadio,
+        Integer vitorias,
+        Integer empates,
+        Integer derrotas,
         Boolean ativo
+
 ) {}

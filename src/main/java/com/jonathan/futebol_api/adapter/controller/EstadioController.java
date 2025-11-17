@@ -56,7 +56,6 @@ public class EstadioController {
         List<Estadio> estadios = service.listaTodosEstadios();
         return ResponseEntity.ok(estadios);
 
-
     }
 
     @DeleteMapping("/{id}")

@@ -1,49 +1,43 @@
 package com.jonathan.futebol_api.core.entity;
 
-
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.data.annotation.Id;
-import java.time.LocalDate;
 
 @Entity
-@Table(name = "CLUBE")
+@Table(name = "Clube")
 public class Clube {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idClube;
+    private int idClube;
 
-    @NotNull
     @Column(name = "nome")
     private String nome;
 
-
-    @Column(name = "data_criacao")
-    private LocalDate data_criacao;
-
-    @Column(name = "fk_idestadio")
-    private Integer fkIdestadio;
-
-    @Column(name = "vitorias")
-    private Integer vitorias;
-
-    @Column(name = "derrotas")
-    private Integer derrotas;
-
-    @Column(name = "empates")
-    private Integer empates;
+    @Column(name = "estado")
+    private String estado;
 
     @Column(name = "ativo")
     private Boolean ativo;
 
+    @Column(name = "fk_idestadio")
+    private Integer fk_estadio; // Adicionado conforme seu DTO
+
+    @Column(name = "vitorias")
+    private Integer vitorias;
+
+    @Column(name = "empates")
+    private Integer empates;
+
+    @Column(name = "derrotas")
+    private Integer derrotas;
 
 
-    public Integer getIdClube() {
+    // Getters e Setters
+    public int getIdClube() {
         return idClube;
     }
 
-    public void setIdClube(Integer idClube) {
+    public void setIdClube(int idClube) {
         this.idClube = idClube;
     }
 
@@ -55,44 +49,12 @@ public class Clube {
         this.nome = nome;
     }
 
-    public LocalDate getData_criacao() {
-        return data_criacao;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setData_criacao(LocalDate data_criacao) {
-        this.data_criacao = data_criacao;
-    }
-
-    public Integer getFkIdestadio() {
-        return fkIdestadio;
-    }
-
-    public void setFkIdestadio(Integer fkIdestadio) {
-        this.fkIdestadio = fkIdestadio;
-    }
-
-    public Integer getVitorias() {
-        return vitorias;
-    }
-
-    public void setVitorias(Integer vitorias) {
-        this.vitorias = vitorias;
-    }
-
-    public Integer getDerrotas() {
-        return derrotas;
-    }
-
-    public void setDerrotas(Integer derrotas) {
-        this.derrotas = derrotas;
-    }
-
-    public Integer getEmpates() {
-        return empates;
-    }
-
-    public void setEmpates(Integer empates) {
-        this.empates = empates;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Boolean getAtivo() {
@@ -103,8 +65,37 @@ public class Clube {
         this.ativo = ativo;
     }
 
+    public Integer getFk_estadio() {
+        return fk_estadio;
+    }
 
+    public void setFk_estadio(Integer fk_estadio) {
+        this.fk_estadio = fk_estadio;
+
+
+    }
+
+    public Integer getVitorias() {
+        return vitorias;
+    }
+
+    public void setVitorias(Integer vitorias) {
+        this.vitorias = vitorias;
+    }
+
+    public Integer getEmpates() {
+        return empates;
+    }
+
+    public void setEmpates(Integer empates) {
+        this.empates = empates;
+    }
+
+    public Integer getDerrotas() {
+        return derrotas;
+    }
+
+    public void setDerrotas(Integer derrotas) {
+        this.derrotas = derrotas;
+    }
 }
-
-
-

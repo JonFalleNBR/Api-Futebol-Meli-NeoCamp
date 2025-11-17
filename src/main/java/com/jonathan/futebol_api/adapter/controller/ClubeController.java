@@ -1,6 +1,8 @@
 package com.jonathan.futebol_api.adapter.controller;
 
 
+import com.jonathan.futebol_api.adapter.dto.ClubeRequestDto;
+import com.jonathan.futebol_api.adapter.dto.ClubeResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.usercase.service.ClubeService;
@@ -23,18 +25,52 @@ public class ClubeController {
     private ClubeRepository clubeRepository;
 
     @PostMapping
-    public ResponseEntity<Clube> cadastrarClube(@RequestBody Clube clube){
+    public ResponseEntity<ClubeResponseDTO> cadastrarClube(@RequestBody ClubeRequestDto request){
+        Clube clube = new Clube();
+        clube.setNome(request.nome());
+        clube.setFk_estadio(request.idEstadio());
+        clube.setEstado(request.estado());
+        clube.setAtivo(true);
+        clube.setVitorias(0);
+        clube.setDerrotas(0);
+        clube.setEmpates(0);
+
+
         Clube saveClube = service.cadastrarClube(clube);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saveClube);
+
+        ClubeResponseDTO responseDTO = new ClubeResponseDTO(
+                saveClube.getNome(),
+                saveClube.getEstado(),
+                saveClube.getFk_estadio().toString(),
+                saveClube.getVitorias(),
+                saveClube.getEmpates(),
+                saveClube.getDerrotas(),
+                saveClube.getAtivo()
+
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
 
 
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Clube> buscarClube( @PathVariable Integer id){
-        Optional<Clube> clube = service.buscarClubePorId(id);
-        return clube.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ClubeResponseDTO> buscarClube( @PathVariable Integer id){
+        Optional<Clube> clubeopt = service.buscarClubePorId(id);
+        return clubeopt.map(clube -> {
+            ClubeResponseDTO clubeResponseDTO = new ClubeResponseDTO(
+                    clube.getNome(),
+                    clube.getEstado(),
+                    clube.getFk_estadio().toString(),
+                    clube.getVitorias(),
+                    clube.getEmpates(),
+                    clube.getDerrotas(),
+                    clube.getAtivo()
+
+            );
+            return ResponseEntity.ok(clubeResponseDTO);
+
+        }).orElseGet(() -> ResponseEntity.notFound().build());
 
     }
 
