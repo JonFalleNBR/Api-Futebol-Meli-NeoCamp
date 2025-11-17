@@ -6,6 +6,7 @@ import com.jonathan.futebol_api.adapter.dto.ClubeResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.usercase.service.ClubeService;
+import com.jonathan.futebol_api.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,29 +76,64 @@ public class ClubeController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Clube>> listarClubes(Pageable pageable){
+    public ResponseEntity<Page<ClubeResponseDTO>> listarClubes(Pageable pageable){
         Page<Clube> clubes = service.listarClubes(pageable);
-        return ResponseEntity.ok(clubes);
+
+        Page<ClubeResponseDTO> clubeDtos = clubes.map(clube -> new ClubeResponseDTO(
+                clube.getNome(),
+                clube.getEstado(),
+                clube.getFk_estadio().toString(),
+                clube.getVitorias(),
+                clube.getEmpates(),
+                clube.getDerrotas(),
+                clube.getAtivo()
+
+        ));
+
+        return ResponseEntity.ok(clubeDtos);
 
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Clube> editarClube(@PathVariable Integer id,  @RequestBody Clube clube){
-        if(!clubeRepository.existsById(id)){
-            return  ResponseEntity.notFound().build();
+    public ResponseEntity<ClubeResponseDTO> editarClube(@PathVariable Integer id,  @RequestBody ClubeRequestDto clubeResquest){
 
-        }
 
-        clube.setIdClube(id);
-        Clube updatedClube = service.editarClube(id, clube);
-        return ResponseEntity.ok(updatedClube);
+        Clube clubeExistente = service.buscarClubePorId(id)
+                .orElseThrow(()-> new RuntimeException(utils.MensagensException.CLUBE_INEXISTENTE.getMensagem()));
+
+        clubeExistente.setIdClube(id);
+        clubeExistente.setNome(clubeResquest.nome());
+        clubeExistente.setEstado(clubeResquest.estado());
+        clubeExistente.setFk_estadio(clubeResquest.idEstadio());
+        // TODO ajustar para as estatisticas tambem por favor - Nao esquecer requisito Funcional Importante
+
+        clubeExistente.setVitorias(clubeResquest.vitorias());
+        clubeExistente.setEmpates(clubeResquest.empates());
+        clubeExistente.setDerrotas(clubeResquest.derrotas());
+
+
+        Clube updatedCLube = service.editarClube(id, clubeExistente);
+
+        ClubeResponseDTO responseDTO = new ClubeResponseDTO(
+                updatedCLube.getNome(),
+                updatedCLube.getEstado(),
+                updatedCLube.getFk_estadio().toString(),
+                updatedCLube.getVitorias(),
+                updatedCLube.getEmpates(),
+                updatedCLube.getDerrotas(),
+                updatedCLube.getAtivo()
+
+
+        );
+
+        return ResponseEntity.ok(responseDTO);
 
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> inativeClube(@PathVariable Integer id){
+    public ResponseEntity<Void> inativarClube(@PathVariable Integer id){
         if(!clubeRepository.existsById(id)) {
             return ResponseEntity.notFound().build(); //
         }

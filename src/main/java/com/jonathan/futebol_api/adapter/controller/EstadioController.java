@@ -1,5 +1,8 @@
 package com.jonathan.futebol_api.adapter.controller;
 
+import com.jonathan.futebol_api.adapter.dto.ClubeResponseDTO;
+import com.jonathan.futebol_api.adapter.dto.EstadioRequestDTO;
+import com.jonathan.futebol_api.adapter.dto.EstadioResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.EstadioRepository;
 import com.jonathan.futebol_api.core.entity.Estadio;
 import com.jonathan.futebol_api.core.usercase.service.EstadioService;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/estadio")
@@ -24,37 +28,65 @@ public class EstadioController {
 
 
     @PostMapping
-    public ResponseEntity<Estadio> cadastrarEstadio(@RequestBody Estadio estadio){
+    public ResponseEntity<EstadioResponseDTO> cadastrarEstadio(@RequestBody EstadioRequestDTO requestDTO){
+        Estadio estadio = new Estadio();
+
+        estadio.setNome(requestDTO.nome());
+
+
         Estadio savedEstadio = service.cadastrarEstadio(estadio);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedEstadio);
+
+        EstadioResponseDTO clubeResponseDTO = new EstadioResponseDTO(
+                savedEstadio.getNome()
+
+
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(clubeResponseDTO);
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Estadio> editarInfoEstadio( @PathVariable Integer id  , @RequestBody Estadio estadio){
-        Optional<Estadio>optionalEstadio = service.buscarEstadioPorId(id);
-        return optionalEstadio.map(existing -> {
-                        existing.setNome(estadio.getNome());
-                        Estadio updatedEstadio = estadioRepository.save(existing);
-                    return ResponseEntity.ok(updatedEstadio);
-                })
-                .orElseThrow(() -> new RuntimeException(utils.MensagensException.ESTADIO_INEXISTENTE.getMensagem()));
+    public ResponseEntity<EstadioResponseDTO> editarInfoEstadio( @PathVariable Integer id  , @RequestBody EstadioRequestDTO estadioRequestDTO){
+
+
+        Estadio estadioExistente = service.buscarEstadioPorId(id)
+                .orElseThrow(() -> new RuntimeException(utils.MensagensException.ESTADIO_INEXISTENTE.getMensagem())); // Abordagem mais simples para o caso da busca por id caso o Estadio nao exista
+
+        estadioExistente.setNome(estadioRequestDTO.nome());
+
+        Estadio estadioUpdated = service.editarEstadio(id, estadioExistente);
+
+        EstadioResponseDTO estadioResponseDTO = new EstadioResponseDTO(
+                estadioUpdated.getNome()
+
+        );
+
+        return ResponseEntity.ok(estadioResponseDTO);
 
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estadio> buscarEstadioPorId(@PathVariable Integer id){
+    public ResponseEntity<EstadioResponseDTO> buscarEstadioPorId(@PathVariable Integer id){
         Optional<Estadio> estadio = service.buscarEstadioPorId(id);
-        return estadio.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
 
+        return estadio.map(estadioExistente -> {
+                EstadioResponseDTO estadioResponseDTO = new EstadioResponseDTO(estadioExistente.getNome());
+                return ResponseEntity.ok(estadioResponseDTO);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
 
     }
 
     @GetMapping
-    public ResponseEntity <List<Estadio>> getEstadio(@PathVariable Integer id){
+    public ResponseEntity <List<EstadioResponseDTO>> getEstadio(@PathVariable Integer id){
         List<Estadio> estadios = service.listaTodosEstadios();
-        return ResponseEntity.ok(estadios);
+
+        List<EstadioResponseDTO> estadioResponseDTOs = estadios.stream().map(
+                estadio -> new EstadioResponseDTO(estadio.getNome()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(estadioResponseDTOs);
 
     }
 
