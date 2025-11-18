@@ -33,10 +33,5 @@ public class ClubeMapper {
                     clube.getAtivo()
 
             );
-
     }
-
-
-
-
 }

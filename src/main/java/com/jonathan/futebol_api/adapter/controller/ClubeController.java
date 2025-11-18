@@ -5,6 +5,7 @@ import com.jonathan.futebol_api.adapter.dto.ClubeRequestDto;
 import com.jonathan.futebol_api.adapter.dto.ClubeResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
+import com.jonathan.futebol_api.core.mapper.ClubeMapper;
 import com.jonathan.futebol_api.core.usercase.service.ClubeService;
 import com.jonathan.futebol_api.utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,32 +26,17 @@ public class ClubeController {
     @Autowired
     private ClubeRepository clubeRepository;
 
+
     @PostMapping
     public ResponseEntity<ClubeResponseDTO> cadastrarClube(@RequestBody ClubeRequestDto request){
-        Clube clube = new Clube();
-        clube.setNome(request.nome());
-        clube.setFk_estadio(request.idEstadio());
-        clube.setEstado(request.estado());
-        clube.setAtivo(true);
-        clube.setVitorias(request.vitorias());
-        clube.setDerrotas(request.derrotas());
-        clube.setEmpates(request.empates());
 
+        Clube clube = ClubeMapper.toEntity(request); //-> Usa o mapper para converter o DTO na entidade
 
-        Clube saveClube = service.cadastrarClube(clube);
+        Clube savedClube = service.cadastrarClube(clube); // -> Salva o clube na base de Dados
 
-        ClubeResponseDTO responseDTO = new ClubeResponseDTO(
-                saveClube.getNome(),
-                saveClube.getEstado(),
-                saveClube.getFk_estadio().toString(),
-                saveClube.getVitorias(),
-                saveClube.getEmpates(),
-                saveClube.getDerrotas(),
-                saveClube.getAtivo()
+        ClubeResponseDTO clubeResponseDTO = ClubeMapper.toResponseDto(savedClube); // -> Converte a entidade retornada no DTO de response
 
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(clubeResponseDTO); // -> devolve os dados do DTO na requiscao do Usuario
 
     }
 
@@ -58,17 +44,9 @@ public class ClubeController {
     @GetMapping("/{id}")
     public ResponseEntity<ClubeResponseDTO> buscarClube( @PathVariable Integer id){
         Optional<Clube> clubeopt = service.buscarClubePorId(id);
-        return clubeopt.map(clube -> {
-            ClubeResponseDTO clubeResponseDTO = new ClubeResponseDTO(
-                    clube.getNome(),
-                    clube.getEstado(),
-                    clube.getFk_estadio().toString(),
-                    clube.getVitorias(),
-                    clube.getEmpates(),
-                    clube.getDerrotas(),
-                    clube.getAtivo()
 
-            );
+        return clubeopt.map(clube -> {
+            ClubeResponseDTO clubeResponseDTO = ClubeMapper.toResponseDto(clube);
             return ResponseEntity.ok(clubeResponseDTO);
 
         }).orElseGet(() -> ResponseEntity.notFound().build());
@@ -79,20 +57,10 @@ public class ClubeController {
     public ResponseEntity<Page<ClubeResponseDTO>> listarClubes(Pageable pageable){
         Page<Clube> clubes = service.listarClubes(pageable);
 
-        Page<ClubeResponseDTO> clubeDtos = clubes.map(clube -> new ClubeResponseDTO(
-                clube.getNome(),
-                clube.getEstado(),
-                clube.getFk_estadio().toString(),
-                clube.getVitorias(),
-                clube.getEmpates(),
-                clube.getDerrotas(),
-                clube.getAtivo()
-
-        ));
-
-        return ResponseEntity.ok(clubeDtos);
+        Page<ClubeResponseDTO> clubesDtos = clubes.map(ClubeMapper::toResponseDto);
 
 
+        return ResponseEntity.ok(clubesDtos);
     }
 
     @PutMapping("/{id}")
@@ -102,7 +70,6 @@ public class ClubeController {
         Clube clubeExistente = service.buscarClubePorId(id)
                 .orElseThrow(()-> new RuntimeException(utils.MensagensException.CLUBE_INEXISTENTE.getMensagem()));
 
-        clubeExistente.setIdClube(id);
         clubeExistente.setNome(clubeResquest.nome());
         clubeExistente.setEstado(clubeResquest.estado());
         clubeExistente.setFk_estadio(clubeResquest.idEstadio());
@@ -115,19 +82,10 @@ public class ClubeController {
 
         Clube updatedCLube = service.editarClube(id, clubeExistente);
 
-        ClubeResponseDTO responseDTO = new ClubeResponseDTO(
-                updatedCLube.getNome(),
-                updatedCLube.getEstado(),
-                updatedCLube.getFk_estadio().toString(),
-                updatedCLube.getVitorias(),
-                updatedCLube.getEmpates(),
-                updatedCLube.getDerrotas(),
-                updatedCLube.getAtivo()
+         ClubeResponseDTO clubeResponseDTO = ClubeMapper.toResponseDto(updatedCLube);
 
 
-        );
-
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok(clubeResponseDTO);
 
     }
 
