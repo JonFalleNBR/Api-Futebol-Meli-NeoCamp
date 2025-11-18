@@ -20,7 +20,9 @@ public class EstadioMapper {
 
     public static EstadioResponseDTO toDto(Estadio estadio){
             return new EstadioResponseDTO(
+                    estadio.getIdEstadio(),
                     estadio.getNome()
+
 
             );
     }
