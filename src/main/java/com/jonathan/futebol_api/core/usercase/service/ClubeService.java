@@ -36,7 +36,7 @@ public class ClubeService {
 
 
     public Clube inativarClube(Integer id){
-        Clube clube = clubeRepository.findbyId(id)
+        Clube clube = clubeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(utils.MensagensException.CLUBE_INEXISTENTE.getMensagem()));
         clube.setAtivo(false);
         return clubeRepository.save(clube);
@@ -44,7 +44,7 @@ public class ClubeService {
     }
 
     public Optional<Clube> buscarClubePorId(Integer id){
-        return clubeRepository.findbyId(id);
+        return clubeRepository.findById(id);
 
     }
 

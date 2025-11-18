@@ -1,5 +1,6 @@
 package com.jonathan.futebol_api.core.entity;
 
+import com.jonathan.futebol_api.core.converter.BooleanIntegerConverter;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class Clube {
     private String estado;
 
     @Column(name = "ativo")
+    @Convert(converter = BooleanIntegerConverter.class)
     private Boolean ativo;
 
     @Column(name = "fk_idestadio")

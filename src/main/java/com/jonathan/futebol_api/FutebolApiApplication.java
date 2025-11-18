@@ -1,4 +1,4 @@
-package com.jonathan.futebol_api.framework.config;
+package com.jonathan.futebol_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,9 +10,6 @@ public class FutebolApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FutebolApiApplication.class, args);
 	}
-
-
-
 
 
 }
