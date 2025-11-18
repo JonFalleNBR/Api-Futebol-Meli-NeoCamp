@@ -32,9 +32,9 @@ public class ClubeController {
         clube.setFk_estadio(request.idEstadio());
         clube.setEstado(request.estado());
         clube.setAtivo(true);
-        clube.setVitorias(0);
-        clube.setDerrotas(0);
-        clube.setEmpates(0);
+        clube.setVitorias(request.vitorias());
+        clube.setDerrotas(request.derrotas());
+        clube.setEmpates(request.empates());
 
 
         Clube saveClube = service.cadastrarClube(clube);
