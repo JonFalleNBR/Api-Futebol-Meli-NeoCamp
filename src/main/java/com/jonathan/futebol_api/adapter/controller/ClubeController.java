@@ -42,7 +42,7 @@ public class ClubeController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClubeResponseDTO> buscarClube( @PathVariable Integer id){
+    public ResponseEntity<ClubeResponseDTO> buscarClubeId( @PathVariable Integer id){
         Optional<Clube> clubeopt = service.buscarClubePorId(id);
 
         return clubeopt.map(clube -> {

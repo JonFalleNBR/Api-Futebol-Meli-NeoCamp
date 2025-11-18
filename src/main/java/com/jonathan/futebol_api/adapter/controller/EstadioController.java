@@ -5,9 +5,11 @@ import com.jonathan.futebol_api.adapter.dto.EstadioRequestDTO;
 import com.jonathan.futebol_api.adapter.dto.EstadioResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.EstadioRepository;
 import com.jonathan.futebol_api.core.entity.Estadio;
+import com.jonathan.futebol_api.core.mapper.EstadioMapper;
 import com.jonathan.futebol_api.core.usercase.service.EstadioService;
 import com.jonathan.futebol_api.utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,18 +31,12 @@ public class EstadioController {
 
     @PostMapping
     public ResponseEntity<EstadioResponseDTO> cadastrarEstadio(@RequestBody EstadioRequestDTO requestDTO){
-        Estadio estadio = new Estadio();
 
-        estadio.setNome(requestDTO.nome());
-
+        Estadio estadio = EstadioMapper.toEntity(requestDTO);
 
         Estadio savedEstadio = service.cadastrarEstadio(estadio);
 
-        EstadioResponseDTO clubeResponseDTO = new EstadioResponseDTO(
-                savedEstadio.getNome()
-
-
-        );
+        EstadioResponseDTO clubeResponseDTO = EstadioMapper.toDto(savedEstadio);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(clubeResponseDTO);
 
@@ -49,7 +45,6 @@ public class EstadioController {
     @PutMapping("/{id}")
     public ResponseEntity<EstadioResponseDTO> editarInfoEstadio( @PathVariable Integer id  , @RequestBody EstadioRequestDTO estadioRequestDTO){
 
-
         Estadio estadioExistente = service.buscarEstadioPorId(id)
                 .orElseThrow(() -> new RuntimeException(utils.MensagensException.ESTADIO_INEXISTENTE.getMensagem())); // Abordagem mais simples para o caso da busca por id caso o Estadio nao exista
 
@@ -57,10 +52,8 @@ public class EstadioController {
 
         Estadio estadioUpdated = service.editarEstadio(id, estadioExistente);
 
-        EstadioResponseDTO estadioResponseDTO = new EstadioResponseDTO(
-                estadioUpdated.getNome()
+        EstadioResponseDTO estadioResponseDTO = EstadioMapper.toDto(estadioUpdated);
 
-        );
 
         return ResponseEntity.ok(estadioResponseDTO);
 
@@ -69,24 +62,23 @@ public class EstadioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EstadioResponseDTO> buscarEstadioPorId(@PathVariable Integer id){
-        Optional<Estadio> estadio = service.buscarEstadioPorId(id);
+        Optional<Estadio> estadioopt = service.buscarEstadioPorId(id);
 
-        return estadio.map(estadioExistente -> {
-                EstadioResponseDTO estadioResponseDTO = new EstadioResponseDTO(estadioExistente.getNome());
-                return ResponseEntity.ok(estadioResponseDTO);
+        return estadioopt.map(estadio -> {
+            EstadioResponseDTO estadioResponseDTO = EstadioMapper.toDto(estadio);
+            return ResponseEntity.ok(estadioResponseDTO);
+
         }).orElseGet(() -> ResponseEntity.notFound().build());
 
     }
 
     @GetMapping
-    public ResponseEntity <List<EstadioResponseDTO>> getEstadio(@PathVariable Integer id){
+    public ResponseEntity <List<EstadioResponseDTO>> listarEstadios(){
         List<Estadio> estadios = service.listaTodosEstadios();
 
-        List<EstadioResponseDTO> estadioResponseDTOs = estadios.stream().map(
-                estadio -> new EstadioResponseDTO(estadio.getNome()))
-                .collect(Collectors.toList());
+        List<EstadioResponseDTO>  estadiosDtos = EstadioMapper.estadioResponseDTOList(estadios);
 
-        return ResponseEntity.ok(estadioResponseDTOs);
+        return ResponseEntity.ok(estadiosDtos);
 
     }
 
@@ -100,8 +92,6 @@ public class EstadioController {
         return ResponseEntity.noContent().build();
 
     }
-
-
 
 
 }
