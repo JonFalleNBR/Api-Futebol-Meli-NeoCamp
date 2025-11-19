@@ -15,6 +15,6 @@ public record ClubeRequestDto(
 
         @NotNull Integer derrotas,
 
-        Integer ativo
+        Boolean ativo
 ) {}
 
