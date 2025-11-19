@@ -12,4 +12,6 @@ public class FutebolApiApplication {
 	}
 
 
+	// TODO adaptar  possivel melhoria de ordencao de ID  - trocar id Sequencial pelo UU ID -> ID original nao fica acessivel no Front End
+	//TODO ajustar o request do ativo para mudar de ativo ou falso conforme necessario no Update
 }

@@ -24,6 +24,7 @@ public class ClubeMapper {
 
     public static ClubeResponseDTO  toResponseDto (Clube clube){
             return new ClubeResponseDTO(
+                    clube.getIdClube(),
                     clube.getNome(),
                     clube.getEstado(),
                     clube.getFk_estadio().toString(),

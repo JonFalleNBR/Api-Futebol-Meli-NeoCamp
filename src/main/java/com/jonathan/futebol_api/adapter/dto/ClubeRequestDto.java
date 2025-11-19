@@ -13,6 +13,8 @@ public record ClubeRequestDto(
 
         @NotNull Integer empates,
 
-        @NotNull Integer derrotas
+        @NotNull Integer derrotas,
+
+        Integer ativo
 ) {}
 
