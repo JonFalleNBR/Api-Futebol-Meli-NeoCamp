@@ -14,10 +14,10 @@ public class Partida {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
+    @ManyToOne
     private Clube clubeMandante;
 
-    @ManyToMany
+    @ManyToOne
     private Clube clubeVisitante;
 
     private String resultado;

@@ -1,5 +1,6 @@
 package com.jonathan.futebol_api.core.usercase.service;
 
+import com.jonathan.futebol_api.core.exception.Exceptions;
 import com.jonathan.futebol_api.utils;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
@@ -27,7 +28,7 @@ public class ClubeService {
 
     public Clube editarClube(Integer id, Clube clubeAtualizado){
         if(!clubeRepository.existsById(id)) {
-            throw  new RuntimeException(utils.MensagensException.CLUBE_INEXISTENTE.getMensagem());
+            throw  new Exceptions.ClubeInexistenteException(utils.MensagensException.CLUBE_INEXISTENTE);
 
         }
         clubeAtualizado.setIdClube(id);
@@ -37,7 +38,7 @@ public class ClubeService {
 
     public Clube inativarClube(Integer id){
         Clube clube = clubeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(utils.MensagensException.CLUBE_INEXISTENTE.getMensagem()));
+                .orElseThrow(() -> new Exceptions.ClubeInexistenteException(utils.MensagensException.CLUBE_INEXISTENTE));
         clube.setAtivo(false);
         return clubeRepository.save(clube);
 

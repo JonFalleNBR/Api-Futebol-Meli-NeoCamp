@@ -5,11 +5,12 @@ import com.jonathan.futebol_api.core.entity.Estadio;
 
 import java.time.LocalDateTime;
 
-public record ParitdaInterface(
+public record PartidaRequestDTO(
 
-        Clube clubeMandante,
-        Clube clubeVisitante,
-        Estadio estadio,
+
+        Long idClubeMandante,
+        Long idClubeVisitante,
+        Long idEstadio,
         LocalDateTime horarioPartida
 
 

@@ -17,8 +17,6 @@ public interface ClubeRepository extends JpaRepository<Clube, Integer>, JpaSpeci
 //Page<Clube> findByAtivo(Boolean ativo, Pageable pageable);
 //
 //Page<Clube> findByEstado(String estado, Pageable pageable);
-
-
-
+    
 
 }

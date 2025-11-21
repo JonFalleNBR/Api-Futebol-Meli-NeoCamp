@@ -1,11 +1,15 @@
 package com.jonathan.futebol_api.core.usercase.service;
 
+import com.jonathan.futebol_api.adapter.dto.PartidaRequestDTO;
+import com.jonathan.futebol_api.adapter.dto.PartidaResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.adapter.repository.EstadioRepository;
 import com.jonathan.futebol_api.adapter.repository.PartidaRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Estadio;
 import com.jonathan.futebol_api.core.entity.Partida;
+import com.jonathan.futebol_api.core.exception.Exceptions;
+import com.jonathan.futebol_api.core.mapper.PartidaMapper;
 import com.jonathan.futebol_api.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,34 +31,37 @@ public class PartidaService {
     private EstadioRepository estadioRepository;
 
 
-    public Partida cadastrarNovaPartida(Partida partida, Estadio estadio){
-        Clube clubeMandante = partida.getClubeMandante();
-        Clube clubeVisitante = partida.getClubeVisitante();
-        Estadio estadioPartida = partida.getEstadio();
+    public PartidaResponseDTO cadastrarNovaPartida(PartidaRequestDTO partidaRequestDTO){
 
+        Long idClubeMandante = partidaRequestDTO.idClubeMandante();
+        Long idClubeVisitante = partidaRequestDTO.idClubeVisitante();
+        Long idEstadio = partidaRequestDTO.idEstadio();
 
-        if(!clubeRepository_.existsById(clubeMandante.getIdClube())){
-            throw new RuntimeException(utils.MensagensException.CLUBE_INEXISTENTE.getMensagem());
+        if(!clubeRepository_.existsById(idClubeMandante.intValue())){
+            throw new Exceptions.ClubeInexistenteException(utils.MensagensException.CLUBE_INEXISTENTE);
 
         }
-        if(!clubeRepository_.existsById(clubeVisitante.getIdClube())){
-            throw new RuntimeException(utils.MensagensException.CLUBE_INEXISTENTE.getMensagem());
-        }
-
-
-        if (!estadioRepository.existsById(estadioPartida.getIdEstadio())){
-            throw new RuntimeException(utils.MensagensException.ESTADIO_INEXISTENTE.getMensagem());
-
+        if(!clubeRepository_.existsById(idClubeVisitante.intValue())){
+            throw new Exceptions.ClubeInexistenteException(utils.MensagensException.CLUBE_INEXISTENTE);
         }
 
 
-        return partidaRepository_.save(partida);
+        if (!estadioRepository.existsById(idEstadio.intValue())){
+            throw new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE);
+
+        }
+
+
+        Partida partida = PartidaMapper.INSTANCE.toEntity(partidaRequestDTO);
+
+        partida = partidaRepository_.save(partida);
+        return PartidaMapper.INSTANCE.toResponseDTO(partida);
     }
 
 
     public Optional<Partida> listaPartidaPorId(Long id){
         Partida partida = partidaRepository_.findById(id)
-                .orElseThrow(() -> new RuntimeException(utils.MensagensException.PARTIDA_INVALIDA.getMensagem()));
+                .orElseThrow(() -> new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA));
 
         return partidaRepository_.findById(id);
     }
@@ -63,9 +70,5 @@ public class PartidaService {
         return partidaRepository_.findAll(pageable);
 
     }
-
-    // TODO fazer melhoria dos logs de Exception - substituir o RunTimeException
-
-
 
 }
