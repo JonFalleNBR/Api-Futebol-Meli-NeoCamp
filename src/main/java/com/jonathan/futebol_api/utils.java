@@ -3,7 +3,7 @@ package com.jonathan.futebol_api;
 public class utils {
 
     public enum MensagensException{
-        CLUBE_INEXISTENTE("CLube nao encontrado na noosa base"),
+        CLUBE_INEXISTENTE("Clube nao encontrado na nossa base de Dados"),
 
         ESTADIO_INEXISTENTE("Estadio nao encontrado na base de Dados");
 
