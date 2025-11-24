@@ -12,7 +12,9 @@ import com.jonathan.futebol_api.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
 
@@ -66,6 +68,17 @@ public class PartidaService {
 
     public Page<Partida> listaTodasPartidas(Pageable pageable){
         return partidaRepository_.findAll(pageable);
+
+    }
+
+
+
+    public void  deletarPartidaHistorico(@PathVariable Long id){
+            Partida partida = partidaRepository_.findById(id)
+                    .orElseThrow(() ->new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA));
+
+
+            partidaRepository_.deleteById(id);
 
     }
 

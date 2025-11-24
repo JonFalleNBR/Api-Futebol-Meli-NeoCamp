@@ -69,4 +69,19 @@ public class PartidaController {
 
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removerPartifda(@PathVariable Long id){
+            try{
+                partidaService.deletarPartidaHistorico(id);
+                return ResponseEntity.noContent().build(); // -> Retorna um 204 no Content - correto para casos de update e Delete
+
+            }catch (Exceptions.ClubeInvalidoeException e ){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+            }
+
+
+    }
+
 }

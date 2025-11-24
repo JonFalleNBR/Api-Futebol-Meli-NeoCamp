@@ -13,6 +13,8 @@ public record PartidaRequestDTO(
         Long idEstadio,
         LocalDateTime horarioPartida
 
+        // TODO ADICIONAR PLACAR DA PARTIDA
+
 
 ) {
 }
