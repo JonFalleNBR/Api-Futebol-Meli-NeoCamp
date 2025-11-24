@@ -7,7 +7,13 @@ public class utils {
 
         ESTADIO_INEXISTENTE("Estadio nao encontrado na base de Dados"),
 
-        PARTIDA_INVALIDA("Partida nao encontrada em nossa base de Dados");
+        PARTIDA_INVALIDA("Partida nao encontrada em nossa base de Dados"),
+
+
+
+        CLUBE_JA_EXISTE("Clube ja existe, por favor de outro nome"),
+
+        PARTIDA_JA_CRIADA("Partida ja criada no nosso historico");
 
         private final String mensagem;
 

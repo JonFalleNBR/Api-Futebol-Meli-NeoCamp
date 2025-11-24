@@ -5,6 +5,7 @@ import com.jonathan.futebol_api.adapter.dto.EstadioRequestDTO;
 import com.jonathan.futebol_api.adapter.dto.EstadioResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.EstadioRepository;
 import com.jonathan.futebol_api.core.entity.Estadio;
+import com.jonathan.futebol_api.core.exception.Exceptions;
 import com.jonathan.futebol_api.core.mapper.EstadioMapper;
 import com.jonathan.futebol_api.core.usercase.service.EstadioService;
 import com.jonathan.futebol_api.utils;
@@ -46,7 +47,7 @@ public class EstadioController {
     public ResponseEntity<EstadioResponseDTO> editarInfoEstadio( @PathVariable Integer id  , @RequestBody EstadioRequestDTO estadioRequestDTO){
 
         Estadio estadioExistente = service.buscarEstadioPorId(id)
-                .orElseThrow(() -> new RuntimeException(utils.MensagensException.ESTADIO_INEXISTENTE.getMensagem())); // Abordagem mais simples para o caso da busca por id caso o Estadio nao exista
+                .orElseThrow(() -> new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE)); // Abordagem mais simples para o caso da busca por id caso o Estadio nao exista
 
         estadioExistente.setNome(estadioRequestDTO.nome());
 

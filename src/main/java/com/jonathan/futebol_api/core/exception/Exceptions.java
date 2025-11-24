@@ -5,14 +5,15 @@ import com.jonathan.futebol_api.utils;
 
 public class Exceptions {
 
-    public static class ClubeInexistenteException extends RuntimeException {
+    public static class ClubeInvalidoeException extends RuntimeException {
 
-        public ClubeInexistenteException(utils.MensagensException mensagem) {
+        public ClubeInvalidoeException(utils.MensagensException mensagem) {
             super(mensagem.getMensagem());
         }
 
 
     }
+
 
     public static class EstadioInexistenteException extends RuntimeException{
             public EstadioInexistenteException(utils.MensagensException mensagem){

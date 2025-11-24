@@ -5,8 +5,6 @@ import com.jonathan.futebol_api.adapter.dto.PartidaResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.adapter.repository.EstadioRepository;
 import com.jonathan.futebol_api.adapter.repository.PartidaRepository;
-import com.jonathan.futebol_api.core.entity.Clube;
-import com.jonathan.futebol_api.core.entity.Estadio;
 import com.jonathan.futebol_api.core.entity.Partida;
 import com.jonathan.futebol_api.core.exception.Exceptions;
 import com.jonathan.futebol_api.core.mapper.PartidaMapper;
@@ -38,11 +36,11 @@ public class PartidaService {
         Long idEstadio = partidaRequestDTO.idEstadio();
 
         if(!clubeRepository_.existsById(idClubeMandante.intValue())){
-            throw new Exceptions.ClubeInexistenteException(utils.MensagensException.CLUBE_INEXISTENTE);
+            throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
 
         }
         if(!clubeRepository_.existsById(idClubeVisitante.intValue())){
-            throw new Exceptions.ClubeInexistenteException(utils.MensagensException.CLUBE_INEXISTENTE);
+            throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
         }
 
 
