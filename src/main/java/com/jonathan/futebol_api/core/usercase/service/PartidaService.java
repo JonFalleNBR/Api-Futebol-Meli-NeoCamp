@@ -57,11 +57,11 @@ public class PartidaService {
     }
 
 
-    public Optional<Partida> listaPartidaPorId(Long id){
+    public PartidaResponseDTO listaPartidaPorId(Long id){
         Partida partida = partidaRepository_.findById(id)
                 .orElseThrow(() -> new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA));
 
-        return partidaRepository_.findById(id);
+        return PartidaMapper.INSTANCE.toResponseDTO(partida);
     }
 
     public Page<Partida> listaTodasPartidas(Pageable pageable){
