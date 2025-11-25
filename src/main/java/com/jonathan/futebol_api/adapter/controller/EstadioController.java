@@ -44,7 +44,7 @@ public class EstadioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EstadioResponseDTO> editarInfoEstadio( @PathVariable Integer id  , @RequestBody EstadioRequestDTO estadioRequestDTO){
+    public ResponseEntity<EstadioResponseDTO> editarInfoEstadio( @PathVariable Long id  , @RequestBody EstadioRequestDTO estadioRequestDTO){
 
         Estadio estadioExistente = service.buscarEstadioPorId(id)
                 .orElseThrow(() -> new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE)); // Abordagem mais simples para o caso da busca por id caso o Estadio nao exista
@@ -62,7 +62,7 @@ public class EstadioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstadioResponseDTO> buscarEstadioPorId(@PathVariable Integer id){
+    public ResponseEntity<EstadioResponseDTO> buscarEstadioPorId(@PathVariable Long id){
         Optional<Estadio> estadioopt = service.buscarEstadioPorId(id);
 
         return estadioopt.map(estadio -> {
@@ -84,7 +84,7 @@ public class EstadioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarEstadio(@PathVariable Integer id){
+    public ResponseEntity<Void> deletarEstadio(@PathVariable Long id){
         try{
             service.removerEstadio(id);
             return ResponseEntity.noContent().build();

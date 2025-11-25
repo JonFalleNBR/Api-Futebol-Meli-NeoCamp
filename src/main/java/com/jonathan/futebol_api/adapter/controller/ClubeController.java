@@ -5,6 +5,7 @@ import com.jonathan.futebol_api.adapter.dto.ClubeRequestDto;
 import com.jonathan.futebol_api.adapter.dto.ClubeResponseDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
+import com.jonathan.futebol_api.core.entity.Estadio;
 import com.jonathan.futebol_api.core.mapper.ClubeMapper;
 import com.jonathan.futebol_api.core.usercase.service.ClubeService;
 import com.jonathan.futebol_api.utils;
@@ -42,7 +43,7 @@ public class ClubeController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClubeResponseDTO> buscarClubeId( @PathVariable Integer id){
+    public ResponseEntity<ClubeResponseDTO> buscarClubeId( @PathVariable Long id){
         Optional<Clube> clubeopt = service.buscarClubePorId(id);
 
         return clubeopt.map(clube -> {
@@ -64,7 +65,7 @@ public class ClubeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClubeResponseDTO> editarClube(@PathVariable Integer id,  @RequestBody ClubeRequestDto clubeResquest){
+    public ResponseEntity<ClubeResponseDTO> editarClube(@PathVariable Long id,  @RequestBody ClubeRequestDto clubeResquest){
 
 
         Clube clubeExistente = service.buscarClubePorId(id)
@@ -72,7 +73,12 @@ public class ClubeController {
 
         clubeExistente.setNome(clubeResquest.nome());
         clubeExistente.setEstado(clubeResquest.estado());
-        clubeExistente.setFk_estadio(clubeResquest.idEstadio());
+
+        // ajuste de estadio setado o objeto diretamente
+        Estadio estadio = new Estadio();
+        estadio.setIdEstadio(clubeResquest.idEstadio());
+        clubeExistente.setEstadio(estadio);
+
         // TODO ajustar para as estatisticas tambem por favor - Nao esquecer requisito Funcional Importante
 
         clubeExistente.setVitorias(clubeResquest.vitorias());
@@ -92,7 +98,7 @@ public class ClubeController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> inativarClube(@PathVariable Integer id){
+    public ResponseEntity<Void> inativarClube(@PathVariable Long id){
         if(!clubeRepository.existsById(id)) {
             return ResponseEntity.notFound().build(); //
         }

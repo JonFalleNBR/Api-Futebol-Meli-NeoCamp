@@ -23,7 +23,7 @@ public class EstadioService {
 
     }
 
-    public Estadio editarEstadio(Integer id, Estadio estadioAtualizado){
+    public Estadio editarEstadio(Long id, Estadio estadioAtualizado){
         if(!estadioRepository.existsById(id)){
             throw new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE);
 
@@ -39,12 +39,12 @@ public class EstadioService {
 
     }
 
-    public Optional<Estadio> buscarEstadioPorId(Integer id){
+    public Optional<Estadio> buscarEstadioPorId(Long id){
       return estadioRepository.findById(id);
 
     }
 
-    public void removerEstadio(Integer id){
+    public void removerEstadio(Long id){
         if(!estadioRepository.existsById(id)){
                 throw new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE);
 

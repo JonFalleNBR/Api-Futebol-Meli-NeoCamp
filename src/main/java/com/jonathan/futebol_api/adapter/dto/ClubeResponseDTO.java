@@ -3,10 +3,10 @@ package com.jonathan.futebol_api.adapter.dto;
 import jakarta.validation.constraints.NotBlank;
 
 public record ClubeResponseDTO(
-        Integer id,
+        Long id,
         @NotBlank String nome,
         String estado,
-        String estadio,
+        String nomeEstadio,
         Integer vitorias,
         Integer empates,
         Integer derrotas,

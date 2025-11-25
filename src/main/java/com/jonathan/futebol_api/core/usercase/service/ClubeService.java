@@ -26,7 +26,7 @@ public class ClubeService {
     }
 
 
-    public Clube editarClube(Integer id, Clube clubeAtualizado){
+    public Clube editarClube(Long id, Clube clubeAtualizado){
         if(!clubeRepository.existsById(id)) {
             throw  new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
 
@@ -36,7 +36,7 @@ public class ClubeService {
     }
 
 
-    public Clube inativarClube(Integer id){
+    public Clube inativarClube(Long id){
         Clube clube = clubeRepository.findById(id)
                 .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE));
         clube.setAtivo(false);
@@ -44,7 +44,7 @@ public class ClubeService {
 
     }
 
-    public Optional<Clube> buscarClubePorId(Integer id){
+    public Optional<Clube> buscarClubePorId(Long id){
         return clubeRepository.findById(id);
 
     }

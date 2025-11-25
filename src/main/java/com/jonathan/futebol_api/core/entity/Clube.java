@@ -4,12 +4,12 @@ import com.jonathan.futebol_api.core.converter.BooleanIntegerConverter;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Clube")
+@Table(name = "clube")
 public class Clube {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idClube;
+    private Long idClube;
 
     @Column(name = "nome")
     private String nome;
@@ -21,8 +21,9 @@ public class Clube {
     @Convert(converter = BooleanIntegerConverter.class)
     private Boolean ativo;
 
-    @Column(name = "fk_idestadio")
-    private Integer fk_estadio; // Adicionado conforme seu DTO
+    @ManyToOne
+    @JoinColumn(name = "fk_idestadio")
+    private Estadio estadio; // Adicionado conforme seu DTO
 
     @Column(name = "vitorias")
     private Integer vitorias;
@@ -35,12 +36,22 @@ public class Clube {
 
 
     // Getters e Setters
-    public int getIdClube() {
+
+
+    public Long getIdClube() {
         return idClube;
     }
 
-    public void setIdClube(int idClube) {
+    public void setIdClube(Long idClube) {
         this.idClube = idClube;
+    }
+
+    public Estadio getEstadio() {
+        return estadio;
+    }
+
+    public void setEstadio(Estadio estadio) {
+        this.estadio = estadio;
     }
 
     public String getNome() {
@@ -67,15 +78,6 @@ public class Clube {
         this.ativo = ativo;
     }
 
-    public Integer getFk_estadio() {
-        return fk_estadio;
-    }
-
-    public void setFk_estadio(Integer fk_estadio) {
-        this.fk_estadio = fk_estadio;
-
-
-    }
 
     public Integer getVitorias() {
         return vitorias;
