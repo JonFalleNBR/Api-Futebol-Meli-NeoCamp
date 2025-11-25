@@ -26,7 +26,7 @@ public class ClubeMapper {
                     clube.getIdClube(),
                     clube.getNome(),
                     clube.getEstado(),
-                    clube.getFk_estadio().toString(),
+                    clube.getFk_estadio() != null ? clube.getFk_estadio().toString() : null,
                     clube.getVitorias(),
                     clube.getEmpates(),
                     clube.getDerrotas(),

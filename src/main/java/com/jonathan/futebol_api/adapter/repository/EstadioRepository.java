@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
 
-public interface EstadioRepository extends JpaRepository<Estadio, Integer>, JpaSpecificationExecutor<Estadio> {
+public interface EstadioRepository extends JpaRepository<Estadio, Long>, JpaSpecificationExecutor<Estadio> {
 
-    Optional<Estadio> findById(Integer id);
+    Optional<Estadio> findById(Long id);
 
 
 }

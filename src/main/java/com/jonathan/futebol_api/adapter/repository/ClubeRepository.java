@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
 
-public interface ClubeRepository extends JpaRepository<Clube, Integer>, JpaSpecificationExecutor<Clube> {
+public interface ClubeRepository extends JpaRepository<Clube, Long>, JpaSpecificationExecutor<Clube> {
 
     
 

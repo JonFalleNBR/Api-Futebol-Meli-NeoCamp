@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record ClubeRequestDto(
         @NotBlank String nome,
-        @NotNull Integer idEstadio,
+        @NotNull Long idEstadio,
         @NotNull String estado,
 
         @NotNull Integer vitorias,

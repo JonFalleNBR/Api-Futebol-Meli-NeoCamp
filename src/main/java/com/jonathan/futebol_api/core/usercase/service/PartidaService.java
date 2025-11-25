@@ -37,16 +37,16 @@ public class PartidaService {
         Long idClubeVisitante = partidaRequestDTO.idClubeVisitante();
         Long idEstadio = partidaRequestDTO.idEstadio();
 
-        if(!clubeRepository_.existsById(idClubeMandante.intValue())){
+        if(!clubeRepository_.existsById(idClubeMandante)){
             throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
 
         }
-        if(!clubeRepository_.existsById(idClubeVisitante.intValue())){
+        if(!clubeRepository_.existsById(idClubeVisitante)){
             throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
         }
 
 
-        if (!estadioRepository.existsById(idEstadio.intValue())){
+        if (!estadioRepository.existsById(idEstadio)){
             throw new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE);
 
         }

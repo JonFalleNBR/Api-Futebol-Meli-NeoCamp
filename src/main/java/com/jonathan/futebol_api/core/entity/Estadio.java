@@ -6,22 +6,22 @@ import lombok.experimental.NonFinal;
 
 
 @Entity
-@Table(name = "ESTADIO")
+@Table(name = "estadio")
 public class Estadio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEstadio;
+    private Long idEstadio;
     @NonFinal
     @Column(name = "nome")
     private String nome;
 
-    
-    public int getIdEstadio(){
-        return  idEstadio;
+
+    public Long getIdEstadio() {
+        return idEstadio;
     }
 
-    public void setIdEstadio(int idEstadio) {
+    public void setIdEstadio(Long idEstadio) {
         this.idEstadio = idEstadio;
     }
 

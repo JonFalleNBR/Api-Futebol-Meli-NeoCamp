@@ -42,7 +42,7 @@ public class ClubeController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClubeResponseDTO> buscarClubeId( @PathVariable Integer id){
+    public ResponseEntity<ClubeResponseDTO> buscarClubeId( @PathVariable Long id){
         Optional<Clube> clubeopt = service.buscarClubePorId(id);
 
         return clubeopt.map(clube -> {
@@ -64,7 +64,7 @@ public class ClubeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClubeResponseDTO> editarClube(@PathVariable Integer id,  @RequestBody ClubeRequestDto clubeResquest){
+    public ResponseEntity<ClubeResponseDTO> editarClube(@PathVariable Long id,  @RequestBody ClubeRequestDto clubeResquest){
 
 
         Clube clubeExistente = service.buscarClubePorId(id)
@@ -92,7 +92,7 @@ public class ClubeController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> inativarClube(@PathVariable Integer id){
+    public ResponseEntity<Void> inativarClube(@PathVariable Long id){
         if(!clubeRepository.existsById(id)) {
             return ResponseEntity.notFound().build(); //
         }
