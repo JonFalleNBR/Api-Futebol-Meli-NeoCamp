@@ -10,13 +10,6 @@ import java.util.Optional;
 
 public interface ClubeRepository extends JpaRepository<Clube, Integer>, JpaSpecificationExecutor<Clube> {
 
-//Optional<Clube> findbyId(Integer id);
-
-//Page<Clube> findBynomeContainsIgnoreCase(String nome, Pageable pageable);
-//
-//Page<Clube> findByAtivo(Boolean ativo, Pageable pageable);
-//
-//Page<Clube> findByEstado(String estado, Pageable pageable);
     
 
 }
