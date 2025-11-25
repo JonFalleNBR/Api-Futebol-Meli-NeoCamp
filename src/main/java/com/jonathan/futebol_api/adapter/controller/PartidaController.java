@@ -51,7 +51,6 @@ public class PartidaController {
 
         return ResponseEntity.ok(responseDTOs);
 
-
     }
 
 
@@ -71,7 +70,7 @@ public class PartidaController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removerPartifda(@PathVariable Long id){
+    public ResponseEntity<Void> removerPartifda(Long id){
             try{
                 partidaService.deletarPartidaHistorico(id);
                 return ResponseEntity.noContent().build(); // -> Retorna um 204 no Content - correto para casos de update e Delete
