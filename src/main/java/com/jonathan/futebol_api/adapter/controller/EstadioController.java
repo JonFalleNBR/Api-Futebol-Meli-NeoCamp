@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/estadio")
@@ -85,13 +85,14 @@ public class EstadioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarEstadio(@PathVariable Integer id){
-        if(!estadioRepository.existsById(id)){
+        try{
+            service.removerEstadio(id);
+            return ResponseEntity.noContent().build();
+
+        }catch (Exceptions.EstadioInexistenteException e){
             return ResponseEntity.notFound().build();
 
         }
-        service.removerEstadio(id);
-        return ResponseEntity.noContent().build();
-
     }
 
 
