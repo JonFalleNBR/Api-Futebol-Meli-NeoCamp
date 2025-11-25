@@ -21,8 +21,9 @@ public class Clube {
     @Convert(converter = BooleanIntegerConverter.class)
     private Boolean ativo;
 
-    @Column(name = "fk_idestadio")
-    private Long fk_estadio; // Adicionado conforme seu DTO
+    @ManyToOne
+    @JoinColumn(name = "fk_idestadio")
+    private Estadio estadio; // Adicionado conforme seu DTO
 
     @Column(name = "vitorias")
     private Integer vitorias;
@@ -45,12 +46,12 @@ public class Clube {
         this.idClube = idClube;
     }
 
-    public Long getFk_estadio() {
-        return fk_estadio;
+    public Estadio getEstadio() {
+        return estadio;
     }
 
-    public void setFk_estadio(Long fk_estadio) {
-        this.fk_estadio = fk_estadio;
+    public void setEstadio(Estadio estadio) {
+        this.estadio = estadio;
     }
 
     public String getNome() {

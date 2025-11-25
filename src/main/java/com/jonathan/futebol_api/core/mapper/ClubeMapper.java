@@ -3,6 +3,7 @@ package com.jonathan.futebol_api.core.mapper;
 import com.jonathan.futebol_api.adapter.dto.ClubeRequestDto;
 import com.jonathan.futebol_api.adapter.dto.ClubeResponseDTO;
 import com.jonathan.futebol_api.core.entity.Clube;
+import com.jonathan.futebol_api.core.entity.Estadio;
 
 public class ClubeMapper {
 
@@ -10,23 +11,30 @@ public class ClubeMapper {
         Clube clube = new Clube();
 
         clube.setNome(requestDto.nome());
-        clube.setFk_estadio(requestDto.idEstadio());
         clube.setEstado(requestDto.estado());
-        clube.setAtivo(true);
+        clube.setAtivo(requestDto.ativo() != null ? requestDto.ativo() : true);
         clube.setVitorias(requestDto.vitorias());
         clube.setEmpates(requestDto.empates());
         clube.setDerrotas(requestDto.derrotas());
+
+        Estadio estadio = new Estadio();
+            estadio.setIdEstadio(requestDto.idEstadio());   // usa só o ID pra JPA fazer o join
+            clube.setEstadio(estadio);
+
 
 
         return clube;
     }
 
     public static ClubeResponseDTO  toResponseDto (Clube clube){
+        String nomeEstadio = clube.getEstadio() != null
+                    ? clube.getEstadio().getNome() : null;
+
             return new ClubeResponseDTO(
                     clube.getIdClube(),
                     clube.getNome(),
                     clube.getEstado(),
-                    clube.getFk_estadio() != null ? clube.getFk_estadio().toString() : null,
+                    nomeEstadio,
                     clube.getVitorias(),
                     clube.getEmpates(),
                     clube.getDerrotas(),

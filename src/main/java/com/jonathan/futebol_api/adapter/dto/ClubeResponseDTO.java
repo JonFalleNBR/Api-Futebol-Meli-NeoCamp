@@ -6,7 +6,7 @@ public record ClubeResponseDTO(
         Long id,
         @NotBlank String nome,
         String estado,
-        String estadio,
+        String nomeEstadio,
         Integer vitorias,
         Integer empates,
         Integer derrotas,
