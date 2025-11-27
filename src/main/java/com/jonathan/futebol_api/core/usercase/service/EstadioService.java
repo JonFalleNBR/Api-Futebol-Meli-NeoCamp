@@ -25,7 +25,7 @@ public class EstadioService {
 
     public Estadio editarEstadio(Long id, Estadio estadioAtualizado){
         if(!estadioRepository.existsById(id)){
-            throw new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE);
+            throw new Exceptions.EstadioInexistenteException(utils.mensagensException.ESTADIO_INEXISTENTE);
 
         }
         estadioAtualizado.setIdEstadio(id);
@@ -46,7 +46,7 @@ public class EstadioService {
 
     public void removerEstadio(Long id){
         if(!estadioRepository.existsById(id)){
-                throw new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE);
+                throw new Exceptions.EstadioInexistenteException(utils.mensagensException.ESTADIO_INEXISTENTE);
 
         }
         estadioRepository.deleteById(id);

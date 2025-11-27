@@ -69,7 +69,7 @@ public class ClubeController {
 
 
         Clube clubeExistente = service.buscarClubePorId(id)
-                .orElseThrow(()-> new RuntimeException(utils.MensagensException.CLUBE_INEXISTENTE.getMensagem()));
+                .orElseThrow(()-> new RuntimeException(utils.mensagensException.CLUBE_INEXISTENTE.getMensagem()));
 
         clubeExistente.setNome(clubeResquest.nome());
         clubeExistente.setEstado(clubeResquest.estado());

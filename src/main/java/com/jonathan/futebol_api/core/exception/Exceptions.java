@@ -7,7 +7,7 @@ public class Exceptions {
 
     public static class ClubeInvalidoeException extends RuntimeException {
 
-        public ClubeInvalidoeException(utils.MensagensException mensagem) {
+        public ClubeInvalidoeException(utils.mensagensException mensagem) {
             super(mensagem.getMensagem());
         }
 
@@ -16,7 +16,7 @@ public class Exceptions {
 
 
     public static class EstadioInexistenteException extends RuntimeException{
-            public EstadioInexistenteException(utils.MensagensException mensagem){
+            public EstadioInexistenteException(utils.mensagensException mensagem){
                 super(mensagem.getMensagem());
 
             }
@@ -24,7 +24,7 @@ public class Exceptions {
     }
 
     public static class PartidaInvalidaException extends RuntimeException{
-        public PartidaInvalidaException(utils.MensagensException mensagem){
+        public PartidaInvalidaException(utils.mensagensException mensagem){
             super(mensagem.getMensagem());
         }
 

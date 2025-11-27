@@ -12,11 +12,8 @@ import com.jonathan.futebol_api.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.Optional;
 
 @Service
 public class PartidaService {
@@ -43,23 +40,23 @@ public class PartidaService {
 
 
         if(idClubeMandante == null || idClubeVisitante == null || idEstadio == null){
-            throw  new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA);
+            throw  new Exceptions.PartidaInvalidaException(utils.mensagensException.PARTIDA_INVALIDA);
         }
 
         if (idClubeMandante.equals(idClubeVisitante)) {
-            throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INVALIDO);
+            throw new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INVALIDO);
         }
 
         if(!clubeRepository_.existsById(idClubeMandante)){
-                throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
+                throw new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE);
         }
 
         if (!clubeRepository_.existsById(idClubeVisitante)){
-            throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
+            throw new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE);
         }
 
         if (!estadioRepository.existsById(idEstadio)) {
-            throw new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE);
+            throw new Exceptions.EstadioInexistenteException(utils.mensagensException.ESTADIO_INEXISTENTE);
         }
 
 
@@ -81,7 +78,7 @@ public class PartidaService {
 
     public PartidaResponseDTO listaPartidaPorId(Long id){
         Partida partida = partidaRepository_.findById(id)
-                .orElseThrow(() -> new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA));
+                .orElseThrow(() -> new Exceptions.PartidaInvalidaException(utils.mensagensException.PARTIDA_INVALIDA));
 
         return partidaMapper.toResponseDTO(partida);
     }
@@ -95,7 +92,7 @@ public class PartidaService {
 
     public void  deletarPartidaHistorico(@PathVariable Long id){
             Partida partida = partidaRepository_.findById(id)
-                    .orElseThrow(() ->new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA));
+                    .orElseThrow(() ->new Exceptions.PartidaInvalidaException(utils.mensagensException.PARTIDA_INVALIDA));
 
 
             partidaRepository_.delete(partida);
