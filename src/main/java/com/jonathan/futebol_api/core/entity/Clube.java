@@ -23,7 +23,7 @@ public class Clube {
 
     @ManyToOne
     @JoinColumn(name = "fk_idestadio")
-    private Estadio estadio; // Adicionado conforme seu DTO
+    private Estadio estadio; // Adicionado conforme o que conta no DTO
 
     @Column(name = "vitorias")
     private Integer vitorias;
