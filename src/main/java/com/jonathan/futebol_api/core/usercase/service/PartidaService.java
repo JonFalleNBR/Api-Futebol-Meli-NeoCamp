@@ -31,31 +31,51 @@ public class PartidaService {
     private EstadioRepository estadioRepository;
 
 
+    @Autowired
+    private PartidaMapper partidaMapper;
+
+
     public PartidaResponseDTO cadastrarNovaPartida(PartidaRequestDTO partidaRequestDTO){
 
         Long idClubeMandante = partidaRequestDTO.idClubeMandante();
         Long idClubeVisitante = partidaRequestDTO.idClubeVisitante();
         Long idEstadio = partidaRequestDTO.idEstadio();
 
+
+        if(idClubeMandante == null || idClubeVisitante == null || idEstadio == null){
+            throw  new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA);
+        }
+
+        if (idClubeMandante.equals(idClubeVisitante)) {
+            throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INVALIDO);
+        }
+
         if(!clubeRepository_.existsById(idClubeMandante)){
-            throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
-
-        }
-        if(!clubeRepository_.existsById(idClubeVisitante)){
-            throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
+                throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
         }
 
+        if (!clubeRepository_.existsById(idClubeVisitante)){
+            throw new Exceptions.ClubeInvalidoeException(utils.MensagensException.CLUBE_INEXISTENTE);
+        }
 
-        if (!estadioRepository.existsById(idEstadio)){
+        if (!estadioRepository.existsById(idEstadio)) {
             throw new Exceptions.EstadioInexistenteException(utils.MensagensException.ESTADIO_INEXISTENTE);
-
         }
 
 
-        Partida partida = PartidaMapper.INSTANCE.toEntity(partidaRequestDTO);
+
+        Partida partida = partidaMapper.toEntity(partidaRequestDTO);
+
+        // formatar o retorno do placar
+        Integer gm = partida.getGolsMandante();
+        Integer gv = partida.getGolsVisitante();
+        partida.setResultado(gm + " x " + gv); // 2 x 1 por ex
+
+        //TODO ajustar logica para estatisticas no futuro
+
 
         partida = partidaRepository_.save(partida);
-        return PartidaMapper.INSTANCE.toResponseDTO(partida);
+        return partidaMapper.toResponseDTO(partida);
     }
 
 
@@ -63,7 +83,7 @@ public class PartidaService {
         Partida partida = partidaRepository_.findById(id)
                 .orElseThrow(() -> new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA));
 
-        return PartidaMapper.INSTANCE.toResponseDTO(partida);
+        return partidaMapper.toResponseDTO(partida);
     }
 
     public Page<Partida> listaTodasPartidas(Pageable pageable){
@@ -78,7 +98,7 @@ public class PartidaService {
                     .orElseThrow(() ->new Exceptions.PartidaInvalidaException(utils.MensagensException.PARTIDA_INVALIDA));
 
 
-            partidaRepository_.deleteById(id);
+            partidaRepository_.delete(partida);
 
     }
 

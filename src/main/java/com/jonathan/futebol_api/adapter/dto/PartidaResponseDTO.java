@@ -9,9 +9,18 @@ public record PartidaResponseDTO(
 
         Long Id,
         Long idClubeMandante,
+        String nomeClubeMandante,
+        Integer golsClubeMandante,
+
         Long idClubeVisitante,
-        Long idEstadio,
-        LocalDateTime dataHoraPartida
+        String nomeClubeVisitante,
+        Integer golsClubeVisitante,
+
+        String nomeEstadio,
+        LocalDateTime dataHoraPartida,
+        String dataHoraFormatada,
+
+        String resultado // ex 2 x 1
 
 ) { }
 

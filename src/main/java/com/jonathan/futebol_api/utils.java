@@ -9,7 +9,7 @@ public class utils {
 
         PARTIDA_INVALIDA("Partida nao encontrada em nossa base de Dados"),
 
-
+        CLUBE_INVALIDO("Clube invalido, por favor informar um que seja valido"),
 
         CLUBE_JA_EXISTE("Clube ja existe, por favor de outro nome"),
 

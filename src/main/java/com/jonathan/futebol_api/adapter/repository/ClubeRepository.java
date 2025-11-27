@@ -10,6 +10,4 @@ import java.util.Optional;
 
 public interface ClubeRepository extends JpaRepository<Clube, Long>, JpaSpecificationExecutor<Clube> {
 
-    
-
 }

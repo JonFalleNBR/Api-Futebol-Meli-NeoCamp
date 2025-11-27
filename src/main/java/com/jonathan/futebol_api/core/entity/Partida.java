@@ -15,19 +15,30 @@ public class Partida {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "clube_mandante_id")
     private Clube clubeMandante;
 
     @ManyToOne
+    @JoinColumn(name = "clube_visitante_id")
     private Clube clubeVisitante;
 
-    private String resultado;
+    @Column(name = "resultado")
+    private String resultado; // 2 X 1 exemplo
 
     @ManyToOne
+    @JoinColumn(name = "estadio_id")
     private Estadio estadio;
 
 
+    @Column(name = "data_hora")
     private LocalDateTime dataHora;
 
+
+    @Column(name = "gols_mandante")
+    private Integer golsMandante;
+
+    @Column(name = "gols_visitante")
+    private Integer golsVisitante;
 
     public Long getId() {
         return id;
@@ -75,5 +86,22 @@ public class Partida {
 
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
+    }
+
+
+    public Integer getGolsMandante() {
+        return golsMandante;
+    }
+
+    public void setGolsMandante(Integer golsMandante) {
+        this.golsMandante = golsMandante;
+    }
+
+    public Integer getGolsVisitante() {
+        return golsVisitante;
+    }
+
+    public void setGolsVisitante(Integer golsVisitante) {
+        this.golsVisitante = golsVisitante;
     }
 }

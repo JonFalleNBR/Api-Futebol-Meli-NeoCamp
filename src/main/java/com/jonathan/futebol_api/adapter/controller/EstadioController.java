@@ -20,13 +20,12 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/estadio")
+@RequestMapping("/estadios")
 public class EstadioController {
 
     @Autowired
     public EstadioService service;
-    @Autowired
-    public EstadioRepository estadioRepository;
+
 
 
 
