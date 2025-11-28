@@ -94,7 +94,7 @@ public class PartidaService {
 
 
 
-    public void  deletarPartidaHistorico(@PathVariable Long id){
+    public void  deletarPartidaHistorico( Long id){
             Partida partida = partidaRepository_.findById(id)
                     .orElseThrow(() ->new Exceptions.PartidaInvalidaException(utils.mensagensException.PARTIDA_INVALIDA));
 
