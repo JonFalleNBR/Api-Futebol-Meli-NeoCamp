@@ -3,6 +3,7 @@ package com.jonathan.futebol_api.adapter.controller;
 
 import com.jonathan.futebol_api.adapter.dto.ClubeRequestDto;
 import com.jonathan.futebol_api.adapter.dto.ClubeResponseDTO;
+import com.jonathan.futebol_api.adapter.dto.RetrospectoGeralDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Estadio;
@@ -107,6 +108,16 @@ public class ClubeController {
         return ResponseEntity.noContent().build();
 
     }
+
+    @GetMapping("{id}/retrospecto")
+    public ResponseEntity<RetrospectoGeralDTO> obterRetrospecto(@PathVariable Long id){
+        RetrospectoGeralDTO dto = service.obterRetrospectoGeral(id);
+        return ResponseEntity.ok(dto);
+
+ // -> Isso já cobre a “Busca avançada 1 – Retrospecto geral de um clube” do enunciado. ✅
+    }
+
+
 
     // TODO -> melhorar os logs de http nas exceptions
 
