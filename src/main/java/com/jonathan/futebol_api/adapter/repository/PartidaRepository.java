@@ -13,7 +13,7 @@ import java.util.List;
 public interface PartidaRepository  extends JpaRepository<Partida, Long> {
 
 
-    // TODAS AS PARIDAS ONDE O CLUBE PARTICIPOU PELO ID
+    // TODAS AS PARTIDAS ONDE O CLUBE PARTICIPOU PELO ID
     @Query("""  
             SELECT  p 
                 FROM Partida p 
@@ -37,7 +37,6 @@ public interface PartidaRepository  extends JpaRepository<Partida, Long> {
 
     // Filtra todas as partidas entre os clubes
     @Query("""
-   
    SELECT  p 
     FROM Partida p 
         WHERE (p.clubeMandante.idClube = :clube1 AND p.clubeVisitante.idClube = :clube2)
@@ -48,16 +47,12 @@ public interface PartidaRepository  extends JpaRepository<Partida, Long> {
                                         @Param("clube2") Long clube2,
                                         Pageable pageable);
 
-
-
     // Filtra partida com intervalo de data e hora
     @Query("""
         SELECT p 
             FROM Partida p 
             WHERE p.dataHora BETWEEN  :inicio AND :fim 
                 ORDER BY p.dataHora ASC 
-
-
 """
     )
     Page<Partida> findPartidasBetweenDatas(@Param("inicio") LocalDateTime inicio,

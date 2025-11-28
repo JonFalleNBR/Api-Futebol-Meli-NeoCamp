@@ -2,9 +2,11 @@ package com.jonathan.futebol_api.core.usercase.service;
 
 import com.jonathan.futebol_api.adapter.dto.PartidaRequestDTO;
 import com.jonathan.futebol_api.adapter.dto.PartidaResponseDTO;
+import com.jonathan.futebol_api.adapter.dto.RetrospectoGeralDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.adapter.repository.EstadioRepository;
 import com.jonathan.futebol_api.adapter.repository.PartidaRepository;
+import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Partida;
 import com.jonathan.futebol_api.core.exception.Exceptions;
 import com.jonathan.futebol_api.core.mapper.PartidaMapper;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 @Service
 public class PartidaService {
@@ -98,5 +102,10 @@ public class PartidaService {
             partidaRepository_.delete(partida);
 
     }
+
+
+
+
+
 
 }

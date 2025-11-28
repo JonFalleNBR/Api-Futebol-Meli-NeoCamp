@@ -1,5 +1,8 @@
 package com.jonathan.futebol_api.core.usercase.service;
 
+import com.jonathan.futebol_api.adapter.dto.RetrospectoGeralDTO;
+import com.jonathan.futebol_api.adapter.repository.PartidaRepository;
+import com.jonathan.futebol_api.core.entity.Partida;
 import com.jonathan.futebol_api.core.exception.Exceptions;
 import com.jonathan.futebol_api.utils;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
@@ -10,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,6 +23,9 @@ public class ClubeService {
 
     @Autowired
     private ClubeRepository clubeRepository;
+
+    @Autowired
+    private PartidaRepository partidaRepository;
 
 
     public Clube cadastrarClube(Clube clube){
@@ -52,6 +59,68 @@ public class ClubeService {
     public Page<Clube> listarClubes(Pageable pageabe){
         return clubeRepository.findAll(pageabe);
 
+
+    }
+
+
+    // PArte do retrospecto
+    public RetrospectoGeralDTO obterRetrospectoGeral(long idClube){
+        Clube clube = clubeRepository.findById(idClube)
+                .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INVALIDO));
+
+        List<Partida> partidas = partidaRepository.findAllByClubeList(idClube);
+
+        int jogos = 0;
+        int vitorias = 0;
+        int empates = 0;
+        int derrotas = 0;
+        int golsMarcados = 0;
+        int golsSofridos = 0;
+
+        for(Partida p : partidas){
+
+            jogos++;
+
+            boolean mandante = p.getClubeMandante().getIdClube().equals(idClube);
+
+            int golsPro = mandante ? p.getGolsMandante() : p.getGolsVisitante();
+            int golsContra = mandante ? p.getGolsVisitante() : p.getGolsMandante();
+
+            golsMarcados += golsPro;
+            golsSofridos += golsContra;
+
+
+            if(golsPro > golsContra){
+                vitorias++;
+
+            } else if (golsPro == golsContra){
+                empates++;
+
+
+            }else {
+                derrotas++;
+            }
+
+        }
+
+
+        int saldoGols = golsMarcados - golsSofridos;
+        int pontos = vitorias * 3 + empates;
+
+
+        return new RetrospectoGeralDTO(
+                clube.getIdClube(),
+                clube.getNome(),
+                jogos,
+                vitorias,
+                empates,
+                derrotas,
+                golsMarcados,
+                golsSofridos,
+                saldoGols,
+                pontos
+
+        );
 
     }
 
