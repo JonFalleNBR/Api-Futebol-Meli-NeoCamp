@@ -63,7 +63,7 @@ public class CampeonatoService {
                 int golsContra = mandante ? p.getGolsVisitante() : p.getGolsMandante();
 
                 golsMarcados += golsPro;
-                golsContra += golsContra;
+                golsSofridos += golsContra;
 
                 if (golsPro > golsContra) {
                     vitorias++;

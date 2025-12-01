@@ -54,4 +54,18 @@ public class PartidaController {
 
     }
 
+
+    /// -----  Buscas Personalizadas de partidas e estatisticas
+    @GetMapping("por-clube/{idClube}")
+    private ResponseEntity<Page<PartidaResponseDTO>> listaPartidaPorClube(@PathVariable Long idClube, Pageable pageable){
+
+        Page<PartidaResponseDTO> partidas = partidaService.listarPartidaPorClube(idClube, pageable);
+        return ResponseEntity.ok(partidas);
+        
+        // TODO AJUSTAR requisicao de busca geral da partida pro clube para que traga se resultado da partida foi vitoria ou derrota para o time cujo id esta sendo buscado
+
+        // TODO concluir as demais buscas avancadas
+    }
+
+
 }
