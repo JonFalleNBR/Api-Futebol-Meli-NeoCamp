@@ -14,6 +14,7 @@ import com.jonathan.futebol_api.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -100,6 +101,20 @@ public class PartidaService {
 
 
             partidaRepository_.delete(partida);
+
+    }
+
+
+
+    public Page<PartidaResponseDTO> listarPartidaPorClube(Long id, Pageable pageable){
+
+     if(!clubeRepository_.existsById(id)){
+         throw new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE);
+     }
+
+     Page<Partida> partidasClube = partidaRepository_.findPartidaByClube(id, pageable);
+
+     return partidasClube.map(partidaMapper::toResponseDTO);
 
     }
 
