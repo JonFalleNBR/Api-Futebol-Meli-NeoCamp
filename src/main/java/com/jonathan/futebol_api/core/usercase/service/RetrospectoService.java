@@ -1,15 +1,18 @@
 package com.jonathan.futebol_api.core.usercase.service;
 
-import com.jonathan.futebol_api.adapter.dto.RetrospectoAdversarioDTO;
+import com.jonathan.futebol_api.adapter.dto.PartidaResponseDTO;
+import com.jonathan.futebol_api.adapter.dto.RetrospectoAdversariosDTO;
+import com.jonathan.futebol_api.adapter.dto.RetrospectoConfrontoDiretoDTO;
 import com.jonathan.futebol_api.adapter.dto.RetrospectoGeralDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.adapter.repository.PartidaRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Partida;
 import com.jonathan.futebol_api.core.exception.Exceptions;
+import com.jonathan.futebol_api.core.mapper.PartidaMapper;
 import com.jonathan.futebol_api.utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,6 +26,9 @@ public class RetrospectoService {
     @Autowired
     private ClubeRepository clubeRepository;
 
+
+    @Autowired
+    private PartidaMapper partidaMapper;
 
     public RetrospectoGeralDTO calcularetrospectoGeral(Long idClube){
 
@@ -102,7 +108,7 @@ public class RetrospectoService {
 
 
 
-    public List<RetrospectoAdversarioDTO> retrospectoAdversario(Long idClubeBase) {
+    public List<RetrospectoAdversariosDTO> retrospectoAdversario(Long idClubeBase) {
         Clube clubeBase = clubeRepository.findById(idClubeBase)
                 .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INVALIDO));
 
@@ -140,7 +146,7 @@ public class RetrospectoService {
             }
         }
 
-            List<RetrospectoAdversarioDTO> retrospecto = new ArrayList<>();
+            List<RetrospectoAdversariosDTO> retrospecto = new ArrayList<>();
 
             // TODO o que esse for faz ?
             for (Map.Entry<Long, AcumuladorAdversario> entry : mapa.entrySet()) {
@@ -155,7 +161,7 @@ public class RetrospectoService {
                             ? (pontos / acumuladorAdversario.jogos * 3.00) * 100.00
                                 : 0.00;
 
-                retrospecto.add(new RetrospectoAdversarioDTO(
+                retrospecto.add(new RetrospectoAdversariosDTO(
                         idAdversario,
                         acumuladorAdversario.nomeAdversario,
                         acumuladorAdversario.jogos,
@@ -174,9 +180,9 @@ public class RetrospectoService {
 
         // ordena: mais jogos, depois mais vitórias, depois nome do adversário
         retrospecto.sort(
-                Comparator.comparing(RetrospectoAdversarioDTO::jogos).reversed()
-                        .thenComparing(RetrospectoAdversarioDTO::vitorias, Comparator.reverseOrder())
-                        .thenComparing(RetrospectoAdversarioDTO::nomeAdversario)
+                Comparator.comparing(RetrospectoAdversariosDTO::jogos).reversed()
+                        .thenComparing(RetrospectoAdversariosDTO::vitorias, Comparator.reverseOrder())
+                        .thenComparing(RetrospectoAdversariosDTO::nomeAdversario)
         );
 
 
@@ -184,6 +190,89 @@ public class RetrospectoService {
 
 
     }
+
+
+
+    // CONFRONTO DIRETO X1
+    public RetrospectoConfrontoDiretoDTO retrospectoConfrontoDireto(Long idClube1, Long idClube2) {
+
+        Clube clube1 = clubeRepository.findById(idClube1)
+                .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE));
+
+        Clube clube2 = clubeRepository.findById(idClube2)
+                .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE));
+
+        // pega TODAS as partidas entre os dois (sem paginação aqui)
+        List<Partida> partidas = partidaRepository
+                .findConfrontosDiretos(idClube1, idClube2, Pageable.unpaged())
+                .getContent();
+
+        int jogos = partidas.size();
+
+        int vitoriasClube1 = 0;
+        int vitoriasClube2 = 0;
+        int empates = 0;
+        int golsClube1 = 0;
+        int golsClube2 = 0;
+
+        for (Partida p : partidas) {
+
+            boolean clube1Mandante = p.getClubeMandante().getIdClube().equals(idClube1);
+
+            int golsMandante = p.getGolsMandante();
+            int golsVisitante = p.getGolsVisitante();
+
+            int golsC1 = clube1Mandante ? golsMandante : golsVisitante;
+            int golsC2 = clube1Mandante ? golsVisitante : golsMandante;
+
+            golsClube1 += golsC1;
+            golsClube2 += golsC2;
+
+            if (golsC1 > golsC2) {
+                vitoriasClube1++;
+            } else if (golsC1 < golsC2) {
+                vitoriasClube2++;
+            } else {
+                empates++;
+            }
+        }
+
+        int saldoClube1 = golsClube1 - golsClube2;
+        int saldoClube2 = golsClube2 - golsClube1;
+
+        int pontosClube1 = vitoriasClube1 * 3 + empates;
+        int pontosClube2 = vitoriasClube2 * 3 + empates;
+
+        double aproveitamentoClube1 = jogos == 0 ? 0.0 : (pontosClube1 / (jogos * 3.0)) * 100.0;
+        double aproveitamentoClube2 = jogos == 0 ? 0.0 : (pontosClube2 / (jogos * 3.0)) * 100.0;
+
+
+
+        List<PartidaResponseDTO> partidasDTO = partidas.stream()
+                .map(partidaMapper::toResponseDTO)
+                .toList();
+
+        return new RetrospectoConfrontoDiretoDTO(
+                clube1.getIdClube(),
+                clube1.getNome(),
+                clube2.getIdClube(),
+                clube2.getNome(),
+                jogos,
+                vitoriasClube1,
+                vitoriasClube2,
+                empates,
+                golsClube1,
+                golsClube2,
+                saldoClube1,
+                saldoClube2,
+                pontosClube1,
+                pontosClube2,
+                aproveitamentoClube1,
+                aproveitamentoClube2,
+                partidasDTO
+        );
+    }
+
 
 
 

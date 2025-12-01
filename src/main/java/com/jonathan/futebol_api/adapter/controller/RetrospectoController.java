@@ -1,8 +1,8 @@
 package com.jonathan.futebol_api.adapter.controller;
 
-import com.jonathan.futebol_api.adapter.dto.RetrospectoAdversarioDTO;
+import com.jonathan.futebol_api.adapter.dto.RetrospectoAdversariosDTO;
+import com.jonathan.futebol_api.adapter.dto.RetrospectoConfrontoDiretoDTO;
 import com.jonathan.futebol_api.adapter.dto.RetrospectoGeralDTO;
-import com.jonathan.futebol_api.core.entity.Partida;
 import com.jonathan.futebol_api.core.usercase.service.RetrospectoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +27,10 @@ public class RetrospectoController {
     }
 
     @GetMapping("{idClube}/retrospecto-adversarios")
-    private ResponseEntity<List<RetrospectoAdversarioDTO>> getRetrospectoAdversario(@PathVariable Long idClube){
-        List<RetrospectoAdversarioDTO> retrospectoAdversario = retrospectoService.retrospectoAdversario(idClube);
+    private ResponseEntity<List<RetrospectoAdversariosDTO>> getRetrospectoAdversario(@PathVariable Long idClube){
+        List<RetrospectoAdversariosDTO> retrospectoAdversario = retrospectoService.retrospectoAdversario(idClube);
 
         return ResponseEntity.ok(retrospectoAdversario);
     }
-
 
 }

@@ -1,6 +1,6 @@
 package com.jonathan.futebol_api.adapter.dto;
 
-public record RetrospectoAdversarioDTO(
+public record RetrospectoAdversariosDTO(
         Long idAdversario,
         String nomeAdversario,
         Integer jogos,
@@ -11,7 +11,6 @@ public record RetrospectoAdversarioDTO(
         Integer golsSofridos,
         Integer saldoGols,
         Double aproveitamento
-        // aproveitamento em %
 
 ) {
 }
