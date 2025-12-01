@@ -56,7 +56,6 @@ public class PartidaController {
 
 
     /// -----  Buscas Personalizadas de partidas e estatisticas
-
     @GetMapping("por-clube/{idClube}")
     private ResponseEntity<Page<PartidaResponseDTO>> listaPartidaPorClube(@PathVariable Long idClube, Pageable pageable){
 
