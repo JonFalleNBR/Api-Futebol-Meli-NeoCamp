@@ -18,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PartidaService {
@@ -118,6 +120,26 @@ public class PartidaService {
 
     }
 
+
+    public List<PartidaResponseDTO> listarGoleadas(){
+    List<Partida> lista = partidaRepository_.findGoleadas();
+
+    return lista.stream()
+            .map(partidaMapper::toResponseDTO)
+            .toList();
+
+    }
+
+    public Page<PartidaResponseDTO> listarPartidaPorData(LocalDateTime inicio,
+                                                            LocalDateTime fim,
+                                                            Pageable pageable){
+
+        Page<Partida> lista = partidaRepository_.findPartidasBetweenDatas(inicio, fim, pageable);
+
+        return lista.map(partidaMapper::toResponseDTO);
+
+
+    }
 
 
 

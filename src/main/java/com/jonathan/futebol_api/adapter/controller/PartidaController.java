@@ -9,9 +9,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @RestController
@@ -64,8 +68,36 @@ public class PartidaController {
         
         // TODO AJUSTAR requisicao de busca geral da partida pro clube para que traga se resultado da partida foi vitoria ou derrota para o time cujo id esta sendo buscado
 
-        // TODO concluir as demais buscas avancadas
+
     }
+
+
+    @GetMapping("/goleadas")
+    public ResponseEntity<List<PartidaResponseDTO>> listarPartidasGoleadas(){
+
+
+        List<PartidaResponseDTO> partidas = partidaService.listarGoleadas();
+
+        return ResponseEntity.ok(partidas);
+
+    }
+
+    @GetMapping("/periodo")
+    public ResponseEntity<Page<PartidaResponseDTO>> listarPartidaBetween(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim,
+
+            Pageable pageable
+            )
+            {
+
+                Page<PartidaResponseDTO>  partidas = partidaService.listarPartidaPorData(inicio, fim, pageable);
+
+                return ResponseEntity.ok(partidas);
+
+    }
+
 
 
 }
