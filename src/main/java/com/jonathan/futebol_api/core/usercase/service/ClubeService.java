@@ -3,8 +3,7 @@ package com.jonathan.futebol_api.core.usercase.service;
 import com.jonathan.futebol_api.adapter.dto.RetrospectoGeralDTO;
 import com.jonathan.futebol_api.adapter.repository.PartidaRepository;
 import com.jonathan.futebol_api.core.entity.Partida;
-import com.jonathan.futebol_api.core.exception.Exceptions;
-import com.jonathan.futebol_api.utils;
+import com.jonathan.futebol_api.utils.Exceptions;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class ClubeService {
 
     public Clube editarClube(Long id, Clube clubeAtualizado){
         if(!clubeRepository.existsById(id)) {
-            throw  new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE);
+            throw  new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INEXISTENTE);
 
         }
         clubeAtualizado.setIdClube(id);
@@ -45,7 +44,7 @@ public class ClubeService {
 
     public Clube inativarClube(Long id){
         Clube clube = clubeRepository.findById(id)
-                .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE));
+                .orElseThrow(() -> new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INEXISTENTE));
         clube.setAtivo(false);
         return clubeRepository.save(clube);
 
@@ -66,7 +65,7 @@ public class ClubeService {
     // PArte do retrospecto
     public RetrospectoGeralDTO obterRetrospectoGeral(long idClube){
         Clube clube = clubeRepository.findById(idClube)
-                .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INVALIDO));
+                .orElseThrow(() -> new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INVALIDO));
 
         List<Partida> partidas = partidaRepository.findAllByClubeList(idClube);
 

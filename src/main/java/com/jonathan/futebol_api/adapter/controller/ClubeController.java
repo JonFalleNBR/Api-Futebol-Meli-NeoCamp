@@ -9,7 +9,7 @@ import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Estadio;
 import com.jonathan.futebol_api.core.mapper.ClubeMapper;
 import com.jonathan.futebol_api.core.usercase.service.ClubeService;
-import com.jonathan.futebol_api.utils;
+import com.jonathan.futebol_api.utils.Exceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -70,7 +70,7 @@ public class ClubeController {
 
 
         Clube clubeExistente = service.buscarClubePorId(id)
-                .orElseThrow(()-> new RuntimeException(utils.mensagensException.CLUBE_INEXISTENTE.getMensagem()));
+                .orElseThrow(()-> new RuntimeException(Exceptions.mensagensException.CLUBE_INEXISTENTE.getMensagem()));
 
         clubeExistente.setNome(clubeResquest.nome());
         clubeExistente.setEstado(clubeResquest.estado());

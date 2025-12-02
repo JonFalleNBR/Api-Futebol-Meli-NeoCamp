@@ -3,8 +3,7 @@ package com.jonathan.futebol_api.core.usercase.service;
 
 import com.jonathan.futebol_api.adapter.repository.EstadioRepository;
 import com.jonathan.futebol_api.core.entity.Estadio;
-import com.jonathan.futebol_api.core.exception.Exceptions;
-import com.jonathan.futebol_api.utils;
+import com.jonathan.futebol_api.utils.Exceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class EstadioService {
 
     public Estadio editarEstadio(Long id, Estadio estadioAtualizado){
         if(!estadioRepository.existsById(id)){
-            throw new Exceptions.EstadioInexistenteException(utils.mensagensException.ESTADIO_INEXISTENTE);
+            throw new com.jonathan.futebol_api.core.exception.Exceptions.EstadioInexistenteException(Exceptions.mensagensException.ESTADIO_INEXISTENTE);
 
         }
         estadioAtualizado.setIdEstadio(id);
@@ -46,7 +45,7 @@ public class EstadioService {
 
     public void removerEstadio(Long id){
         if(!estadioRepository.existsById(id)){
-                throw new Exceptions.EstadioInexistenteException(utils.mensagensException.ESTADIO_INEXISTENTE);
+                throw new com.jonathan.futebol_api.core.exception.Exceptions.EstadioInexistenteException(Exceptions.mensagensException.ESTADIO_INEXISTENTE);
 
         }
         estadioRepository.deleteById(id);
