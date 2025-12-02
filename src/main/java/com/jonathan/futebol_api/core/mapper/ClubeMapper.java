@@ -5,6 +5,8 @@ import com.jonathan.futebol_api.adapter.dto.ClubeResponseDTO;
 import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Estadio;
 
+import java.time.LocalDate;
+
 public class ClubeMapper {
 
     public static Clube toEntity(ClubeRequestDto requestDto){
@@ -21,6 +23,7 @@ public class ClubeMapper {
             estadio.setIdEstadio(requestDto.idEstadio());   // usa só o ID pra JPA fazer o join
             clube.setEstadio(estadio);
 
+        clube.setDataCriacao(LocalDate.now());
 
 
         return clube;
