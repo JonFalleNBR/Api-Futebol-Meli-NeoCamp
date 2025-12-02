@@ -2,25 +2,19 @@ package com.jonathan.futebol_api.core.usercase.service;
 
 import com.jonathan.futebol_api.adapter.dto.PartidaRequestDTO;
 import com.jonathan.futebol_api.adapter.dto.PartidaResponseDTO;
-import com.jonathan.futebol_api.adapter.dto.RetrospectoGeralDTO;
 import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.adapter.repository.EstadioRepository;
 import com.jonathan.futebol_api.adapter.repository.PartidaRepository;
-import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Partida;
-import com.jonathan.futebol_api.core.exception.Exceptions;
 import com.jonathan.futebol_api.core.mapper.PartidaMapper;
-import com.jonathan.futebol_api.utils;
+import com.jonathan.futebol_api.utils.Exceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PartidaService {
@@ -47,23 +41,23 @@ public class PartidaService {
 
 
         if(idClubeMandante == null || idClubeVisitante == null || idEstadio == null){
-            throw  new Exceptions.PartidaInvalidaException(utils.mensagensException.PARTIDA_INVALIDA);
+            throw  new com.jonathan.futebol_api.core.exception.Exceptions.PartidaInvalidaException(Exceptions.mensagensException.PARTIDA_INVALIDA);
         }
 
         if (idClubeMandante.equals(idClubeVisitante)) {
-            throw new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INVALIDO);
+            throw new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INVALIDO);
         }
 
         if(!clubeRepository_.existsById(idClubeMandante)){
-                throw new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE);
+                throw new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INEXISTENTE);
         }
 
         if (!clubeRepository_.existsById(idClubeVisitante)){
-            throw new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE);
+            throw new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INEXISTENTE);
         }
 
         if (!estadioRepository.existsById(idEstadio)) {
-            throw new Exceptions.EstadioInexistenteException(utils.mensagensException.ESTADIO_INEXISTENTE);
+            throw new com.jonathan.futebol_api.core.exception.Exceptions.EstadioInexistenteException(Exceptions.mensagensException.ESTADIO_INEXISTENTE);
         }
 
 
@@ -85,7 +79,7 @@ public class PartidaService {
 
     public PartidaResponseDTO listaPartidaPorId(Long id){
         Partida partida = partidaRepository_.findById(id)
-                .orElseThrow(() -> new Exceptions.PartidaInvalidaException(utils.mensagensException.PARTIDA_INVALIDA));
+                .orElseThrow(() -> new com.jonathan.futebol_api.core.exception.Exceptions.PartidaInvalidaException(Exceptions.mensagensException.PARTIDA_INVALIDA));
 
         return partidaMapper.toResponseDTO(partida);
     }
@@ -99,7 +93,7 @@ public class PartidaService {
 
     public void  deletarPartidaHistorico( Long id){
             Partida partida = partidaRepository_.findById(id)
-                    .orElseThrow(() ->new Exceptions.PartidaInvalidaException(utils.mensagensException.PARTIDA_INVALIDA));
+                    .orElseThrow(() ->new com.jonathan.futebol_api.core.exception.Exceptions.PartidaInvalidaException(Exceptions.mensagensException.PARTIDA_INVALIDA));
 
 
             partidaRepository_.delete(partida);
@@ -111,7 +105,7 @@ public class PartidaService {
     public Page<PartidaResponseDTO> listarPartidaPorClube(Long id, Pageable pageable){
 
      if(!clubeRepository_.existsById(id)){
-         throw new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE);
+         throw new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INEXISTENTE);
      }
 
      Page<Partida> partidasClube = partidaRepository_.findPartidaByClube(id, pageable);

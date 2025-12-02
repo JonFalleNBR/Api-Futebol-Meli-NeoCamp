@@ -1,13 +1,11 @@
 package com.jonathan.futebol_api.core.exception;
 
 
-import com.jonathan.futebol_api.utils;
-
 public class Exceptions {
 
     public static class ClubeInvalidoeException extends RuntimeException {
 
-        public ClubeInvalidoeException(utils.mensagensException mensagem) {
+        public ClubeInvalidoeException(com.jonathan.futebol_api.utils.Exceptions.mensagensException mensagem) {
             super(mensagem.getMensagem());
         }
 
@@ -16,7 +14,7 @@ public class Exceptions {
 
 
     public static class EstadioInexistenteException extends RuntimeException{
-            public EstadioInexistenteException(utils.mensagensException mensagem){
+            public EstadioInexistenteException(com.jonathan.futebol_api.utils.Exceptions.mensagensException mensagem){
                 super(mensagem.getMensagem());
 
             }
@@ -24,7 +22,7 @@ public class Exceptions {
     }
 
     public static class PartidaInvalidaException extends RuntimeException{
-        public PartidaInvalidaException(utils.mensagensException mensagem){
+        public PartidaInvalidaException(com.jonathan.futebol_api.utils.Exceptions.mensagensException mensagem){
             super(mensagem.getMensagem());
         }
 

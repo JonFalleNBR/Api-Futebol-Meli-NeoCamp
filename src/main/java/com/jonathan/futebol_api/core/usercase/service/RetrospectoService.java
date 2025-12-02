@@ -8,9 +8,8 @@ import com.jonathan.futebol_api.adapter.repository.ClubeRepository;
 import com.jonathan.futebol_api.adapter.repository.PartidaRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Partida;
-import com.jonathan.futebol_api.core.exception.Exceptions;
 import com.jonathan.futebol_api.core.mapper.PartidaMapper;
-import com.jonathan.futebol_api.utils;
+import com.jonathan.futebol_api.utils.Exceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,7 @@ public class RetrospectoService {
     public RetrospectoGeralDTO calcularetrospectoGeral(Long idClube){
 
         Clube clube = clubeRepository.findById(idClube)
-                .orElseThrow(()-> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE));
+                .orElseThrow(()-> new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INEXISTENTE));
 
         List<Partida> partidas = partidaRepository.findAllByClubeList(idClube);
 
@@ -110,7 +109,7 @@ public class RetrospectoService {
 
     public List<RetrospectoAdversariosDTO> retrospectoAdversario(Long idClubeBase) {
         Clube clubeBase = clubeRepository.findById(idClubeBase)
-                .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INVALIDO));
+                .orElseThrow(() -> new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INVALIDO));
 
         List<Partida> partidas = partidaRepository.findAllByClubeList(idClubeBase);
 
@@ -197,10 +196,10 @@ public class RetrospectoService {
     public RetrospectoConfrontoDiretoDTO retrospectoConfrontoDireto(Long idClube1, Long idClube2) {
 
         Clube clube1 = clubeRepository.findById(idClube1)
-                .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE));
+                .orElseThrow(() -> new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INEXISTENTE));
 
         Clube clube2 = clubeRepository.findById(idClube2)
-                .orElseThrow(() -> new Exceptions.ClubeInvalidoeException(utils.mensagensException.CLUBE_INEXISTENTE));
+                .orElseThrow(() -> new com.jonathan.futebol_api.core.exception.Exceptions.ClubeInvalidoeException(Exceptions.mensagensException.CLUBE_INEXISTENTE));
 
         // pega TODAS as partidas entre os dois (sem paginação aqui)
         List<Partida> partidas = partidaRepository

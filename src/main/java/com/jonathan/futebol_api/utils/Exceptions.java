@@ -1,6 +1,6 @@
-package com.jonathan.futebol_api;
+package com.jonathan.futebol_api.utils;
 
-public class utils {
+public class Exceptions {
 
     public enum mensagensException {
         CLUBE_INEXISTENTE("Clube nao encontrado na nossa base de Dados"),

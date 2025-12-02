@@ -8,6 +8,8 @@ import com.jonathan.futebol_api.adapter.repository.TabelaCampeonatoRepository;
 import com.jonathan.futebol_api.core.entity.Clube;
 import com.jonathan.futebol_api.core.entity.Partida;
 import com.jonathan.futebol_api.core.entity.TabelaCampeonato;
+import com.jonathan.futebol_api.utils.CriterioDesempate;
+import com.jonathan.futebol_api.utils.TipoAtuacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,9 @@ public class CampeonatoService {
     @Autowired
     private TabelaCampeonatoRepository  tabelaCampeonatoRepository;
 
-    public List<TabelaCampeonatoDTO> gerarTabelaCampeonato(){
+    public List<TabelaCampeonatoDTO> gerarTabelaCampeonato(
+            TipoAtuacao tipoAtuacao, CriterioDesempate criterioDesempate
+    ){
 
 
         tabelaCampeonatoRepository.deleteAllInBatch(); // nova logica para garantir a exclusao dos dados conforme a tabela for sendo atualizada
@@ -41,7 +45,6 @@ public class CampeonatoService {
             List<Partida> partidas = partidaRepository.findAllByClubeList(idCLube);
 
             if (partidas.isEmpty()) {
-
                 continue;
             }
 
@@ -55,9 +58,18 @@ public class CampeonatoService {
 
 
             for (Partida p : partidas) {
-                jogos++;
+//                jogos++;
 
                 boolean mandante = p.getClubeMandante().getIdClube().equals(idCLube);
+
+                if(tipoAtuacao == TipoAtuacao.MANDANTE && !mandante){
+                    continue;
+                }
+                if(tipoAtuacao == TipoAtuacao.VISITANTE && mandante){
+                    continue;
+                }
+                jogos++;
+
 
                 int golsPro = mandante ? p.getGolsMandante() : p.getGolsVisitante();
                 int golsContra = mandante ? p.getGolsVisitante() : p.getGolsMandante();
@@ -74,6 +86,10 @@ public class CampeonatoService {
                     derrotas++;
                 }
 
+            }
+
+            if(jogos == 0){
+                continue;
             }
 
 
@@ -103,12 +119,12 @@ public class CampeonatoService {
 
         tabelaCampeonatoRepository.saveAll(linhas);
 
-       List<TabelaCampeonato> ordenada = tabelaCampeonatoRepository.findAllByOrderByPontosDescSaldoGolsDescGolsMarcadosDescClube_NomeAsc();
+//       List<TabelaCampeonato> ordenada = tabelaCampeonatoRepository.findAllByOrderByPontosDescSaldoGolsDescGolsMarcadosDescClube_NomeAsc();
 
 
        List<TabelaCampeonatoDTO> tabelaDTO = new ArrayList<>();
 
-        for (TabelaCampeonato t : ordenada){
+        for (TabelaCampeonato t : linhas){
             tabelaDTO.add(
                     new TabelaCampeonatoDTO(
                             t.getClube().getIdClube(),
@@ -126,6 +142,26 @@ public class CampeonatoService {
 
         }
 
+        Comparator<TabelaCampeonatoDTO> comparator;
+
+        switch (criterioDesempate){
+            case JOGOS -> comparator = Comparator.comparing(TabelaCampeonatoDTO::jogos);
+            case VITORIAS -> comparator = Comparator.comparing(TabelaCampeonatoDTO::vitorias);
+            case GOLS -> comparator = Comparator.comparing(TabelaCampeonatoDTO::golsMarcados);
+            case PONTOS -> {
+                comparator = Comparator.comparing(TabelaCampeonatoDTO::pontos);
+            }
+            default -> comparator = Comparator.comparing(TabelaCampeonatoDTO::pontos);
+
+
+        }
+
+        comparator = comparator.reversed()
+                .thenComparing(TabelaCampeonatoDTO::saldoGols, Comparator.reverseOrder())
+                .thenComparing(TabelaCampeonatoDTO::golsMarcados, Comparator.reverseOrder())
+                .thenComparing(TabelaCampeonatoDTO::nomeClube);
+
+        tabelaDTO.sort(comparator);
 
         return tabelaDTO;
     }
