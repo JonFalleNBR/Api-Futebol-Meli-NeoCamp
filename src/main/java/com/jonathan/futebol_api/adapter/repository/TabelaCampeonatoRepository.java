@@ -10,7 +10,6 @@ public interface TabelaCampeonatoRepository  extends JpaRepository<TabelaCampeon
 
     Optional<TabelaCampeonato> findByClube_IdClube(Long idClube);
 
-    List<TabelaCampeonato> findAllByOrderByPontosDescSaldoGolsDescGolsMarcadosDescClube_NomeAsc(); // tabela importante de ordenacao
 
 
 }
