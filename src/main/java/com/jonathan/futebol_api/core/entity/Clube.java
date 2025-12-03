@@ -3,6 +3,8 @@ package com.jonathan.futebol_api.core.entity;
 import com.jonathan.futebol_api.core.converter.BooleanIntegerConverter;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "clube")
 public class Clube {
@@ -19,7 +21,7 @@ public class Clube {
 
     @Column(name = "ativo")
     @Convert(converter = BooleanIntegerConverter.class)
-    private Boolean ativo;
+    private Boolean ativo = true;
 
     @ManyToOne
     @JoinColumn(name = "fk_idestadio")
@@ -34,8 +36,9 @@ public class Clube {
     @Column(name = "derrotas")
     private Integer derrotas;
 
+    @Column(nullable = false)
+    private LocalDate dataCriacao; // _NOVO CAMPO
 
-    // Getters e Setters
 
 
     public Long getIdClube() {
@@ -101,5 +104,13 @@ public class Clube {
 
     public void setDerrotas(Integer derrotas) {
         this.derrotas = derrotas;
+    }
+
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 }

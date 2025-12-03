@@ -55,9 +55,26 @@ public class ClubeController {
 
     }
 
+
     @GetMapping
     public ResponseEntity<Page<ClubeResponseDTO>> listarClubes(Pageable pageable){
+
         Page<Clube> clubes = service.listarClubes(pageable);
+        Page<ClubeResponseDTO> clubesDTO = clubes.map(ClubeMapper::toResponseDto);
+
+        return ResponseEntity.ok(clubesDTO);
+
+    }
+
+    @GetMapping("/filtros")
+    public ResponseEntity<Page<ClubeResponseDTO>> listarClubesPorFiltros(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) Boolean ativo,
+            Pageable pageable){
+
+        Page<Clube> clubes = service.listarClubesPorFiltragem(nome, estado, ativo, pageable);
+
 
         Page<ClubeResponseDTO> clubesDtos = clubes.map(ClubeMapper::toResponseDto);
 
