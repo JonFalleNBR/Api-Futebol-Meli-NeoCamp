@@ -11,5 +11,4 @@ public class FutebolApiApplication {
 		SpringApplication.run(FutebolApiApplication.class, args);
 	}
 
-	// TODO adaptar  possivel melhoria de ordencao de ID  - trocar id Sequencial pelo UU ID -> ID original nao fica acessivel no Front End
 }
